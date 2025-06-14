@@ -5,12 +5,15 @@ inputs:
   token:
     description: "Gitea/GitHub PAT für Release-API"
     required: false
+    default: ""
   author_name:
     description: "Commit-Autorname"
     required: false
+    default: ""
   author_email:
     description: "Commit-Autore-Mail"
     required: false
+    default: ""
 
 runs:
   using: "composite"
