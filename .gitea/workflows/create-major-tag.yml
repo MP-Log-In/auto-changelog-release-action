@@ -41,6 +41,9 @@ jobs:
         run: |
           set -euo pipefail
 
+          git config user.name "$CI_COMMIT_AUTHOR_NAME"
+          git config user.email "$CI_COMMIT_AUTHOR_EMAIL"
+
           # Bestimmten Commit des Release-Tags ermitteln
           COMMIT_SHA="$(git rev-list -n 1 "$RELEASE_TAG")"
 
