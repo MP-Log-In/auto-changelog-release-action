@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# === Inputs from GitHub/Gitea Action environment ===
+# Inputs from GitHub/Gitea Action environment
 GIT_REF="${GITHUB_REF:-}"
 COMMIT_BEFORE="${GITHUB_EVENT_BEFORE:-}"
 COMMIT_AFTER="${GITHUB_SHA:-}"
@@ -11,7 +11,7 @@ echo "🔍 Comparing commits:"
 echo "Before: $COMMIT_BEFORE"
 echo "After:  $COMMIT_AFTER"
 
-# === Check branch condition ===
+# Check branch condition
 if [[ "$GIT_REF" != "refs/heads/main" ]]; then
   echo "Not on 'main' branch – skipping version check."
   echo "version_changed=false" >> "$GITHUB_OUTPUT"

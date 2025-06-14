@@ -6,7 +6,7 @@ create_release() {
   local -i max_attempts=3 delay=5 attempt
   local http status
 
-  # Release-Body für die JSON-Payload einlesen
+  # Read release body for JSON payload
   local body_json
   body_json=$(tail -n +2 "$body_file" | jq -Rs .)
 
@@ -53,7 +53,7 @@ CHANGELOG_FILE="CHANGELOG.md"
 CLIFF_CONFIG="cliff.toml"
 RELEASE_BODY_TMP="$(mktemp)"
 
-# === Schritt 1: Version lesen ===
+# === Step 1: Read version ===
 if [[ ! -f "$VERSION_FILE" ]]; then
   echo "❌ VERSION file not found"
   exit 1
@@ -61,7 +61,7 @@ fi
 VERSION="$(<"$VERSION_FILE")"
 echo "📦 Version: $VERSION"
 
-# === Schritt 2: Changelog für Release erzeugen ===
+# === Step 2: Generate changelog for release ===
 echo "📄 Generating changelog for tag v$VERSION"
 git-cliff -c "$CLIFF_CONFIG" -t "v$VERSION" -o "$CHANGELOG_FILE"
 
@@ -80,7 +80,7 @@ awk -v ver="$ESCAPED_VERSION" '
   print_flag
 ' "$CHANGELOG_FILE" > "$RELEASE_BODY_TMP"
 
-# === Schritt 3: Changelog committen ===
+# === Step 3: Commit changelog ===
 git add "$CHANGELOG_FILE"
 if git diff --cached --quiet; then
   echo "✅ No changes to commit"
@@ -90,7 +90,7 @@ else
   git push origin main
 fi
 
-# === Schritt 4: Tag anlegen, falls nötig ===
+# === Step 4: Create tag if necessary ===
 if git rev-parse "v$VERSION" >/dev/null 2>&1; then
   echo "🔁 Tag v$VERSION already exists, skipping."
 else
@@ -101,7 +101,7 @@ else
   git push origin "v$VERSION"
 fi
 
-# === Schritt 5: Release anlegen (mit Retry) ===
+# === Step 5: Create release (with retry) ===
 OWNER="${GITHUB_REPOSITORY%/*}"
 REPO="${GITHUB_REPOSITORY#*/}"
 TOKEN="${RELEASE_PUBLISH_TOKEN:-$ACTIONS_RUNTIME_TOKEN}"
