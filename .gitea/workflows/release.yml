@@ -1,0 +1,15 @@
+name: Auto Changelog & Release
+
+on:
+  push:
+    branches:
+      - main
+      - "**"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: https://git.0xmax42.io/actions/auto-changelog-release-action@978d002e9eb82247da53ddfb4fa2226527290919
+        with:
+          fetch-depth: 0
