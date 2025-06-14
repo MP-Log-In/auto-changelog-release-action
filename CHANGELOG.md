@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - *(scripts)* Validate git configuration during setup - ([212e8c6](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/212e8c6a499365ac77c98138a09b6736dec8fe7e))
 
+### 🚜 Refactor
+
+- *(scripts)* Standardize scripts and improve readability - ([041d7e9](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/041d7e9a8a7baa5b6f41ad6dabd7d4837f7d254a))
+
 ## [0.2.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.1.3..v0.2.1) - 2025-06-14
 
 ### 🚀 Features
