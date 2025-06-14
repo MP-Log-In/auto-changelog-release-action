@@ -25,20 +25,3 @@ runs:
       id: detect
       run: |
         bash ${{ github.action_path }}/scripts/detect-version-change.sh
-
-    - name: Read CLIFF_VERSION
-      shell: bash
-      id: cliff_version
-      run: bash ${{ github.action_path }}/scripts/read-cliff-version.sh
-
-    - name: Install git-cliff
-      shell: bash
-      run: |
-        bash ${{ github.action_path }}/scripts/install-git-cliff.sh "${{ steps.cliff_version.outputs.version }}"
-
-    - name: Set up git
-      shell: bash
-      run: |
-        bash ${{ github.action_path }}/scripts/setup-git.sh \
-          "${{ inputs.author_name }}" \
-          "${{ inputs.author_email }}"
