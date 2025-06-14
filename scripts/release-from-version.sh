@@ -95,7 +95,7 @@ if git rev-parse "v$VERSION" >/dev/null 2>&1; then
   echo "🔁 Tag v$VERSION already exists, skipping."
 else
   echo "🏷️  Creating annotated tag v$VERSION"
-  export GIT_AUTHOR_DATE="$(date --iso-8601=seconds)"
+  export GIT_AUTHOR_DATE="@$(date +%s)"
   export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
   git tag -a "v$VERSION" -F "$RELEASE_BODY_TMP" --cleanup=verbatim
   git push origin "v$VERSION"
