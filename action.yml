@@ -11,6 +11,7 @@ inputs:
   author_email:
     description: "Commit-Autore-Mail"
     required: false
+
 runs:
   using: "composite"
   steps:
@@ -41,15 +42,3 @@ runs:
         bash ${{ github.action_path }}/scripts/setup-git.sh \
           "${{ inputs.author_name }}" \
           "${{ inputs.author_email }}"
-
-    - name: Generate and commit changelog (unreleased)
-      if: steps.detect.outputs.version_changed == 'false' || github.ref != 'refs/heads/main'
-      shell: bash
-      run: bash ${{ github.action_path }}/scripts/generate-unreleased-changelog.sh
-
-    - name: Release from VERSION
-      if: steps.detect.outputs.version_changed == 'true' && github.ref == 'refs/heads/main'
-      shell: bash
-      env:
-        RELEASE_PUBLISH_TOKEN: ${{ inputs.token || '' }}
-      run: bash ${{ github.action_path }}/scripts/release-from-version.sh
