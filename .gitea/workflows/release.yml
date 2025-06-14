@@ -15,3 +15,5 @@ jobs:
           fetch-depth: 0
       - name: Release
         uses: https://git.0xmax42.io/actions/auto-changelog-release-action@main
+        with:
+          token: ${{ secrets.RELEASE_PUBLISH_TOKEN }}
