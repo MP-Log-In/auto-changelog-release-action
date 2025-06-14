@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.1.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.1.0..v0.1.1) - 2025-06-14
+
+### 🚀 Features
+
+- *(workflows)* Add workflow to create major version tags - ([9a05866](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/9a0586653a5e7aa6a3acb12d119f4a43c09e96c1))
 
 ### ⚙️ Miscellaneous Tasks
 
