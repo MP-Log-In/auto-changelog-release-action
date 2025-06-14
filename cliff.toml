@@ -6,8 +6,8 @@
 # Configuration options are organized into tables and keys.
 # See documentation for more information on available options.
 [remote.gitea]
-owner = "maxp"
-repo = "ait"
+owner = "actions"
+repo = "auto-changelog-release-action"
 
 [changelog]
 # postprocessors
