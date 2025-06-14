@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- *(release)* Add retry logic for release creation - ([29243bd](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/29243bd67344a3020fc3023d238dacbdd96c53ad))
+
 ## [0.1.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.1.2..v0.1.3) - 2025-06-14
 
 ### 🐛 Bug Fixes
