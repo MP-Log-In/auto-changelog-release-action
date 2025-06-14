@@ -51,5 +51,5 @@ runs:
       if: steps.detect.outputs.version_changed == 'true' && github.ref == 'refs/heads/main'
       shell: bash
       env:
-        RELEASE_PUBLISH_TOKEN: ${{ inputs.token }}
+        RELEASE_PUBLISH_TOKEN: ${{ inputs.token || '' }}
       run: bash ${{ github.action_path }}/scripts/release-from-version.sh
