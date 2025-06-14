@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.1.0..v0.1.1) - 2025-06-14
+## [unreleased]
+
+### 🐛 Bug Fixes
+
+- *(workflows)* Configure Git user in major tag creation - ([79921dd](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/79921dd63676138f2cfbcc3894f294b292f0a653))
+
+## [0.1.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.1.0..v0.1.2) - 2025-06-14
 
 ### 🚀 Features
 
