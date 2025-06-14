@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.2.2..v0.2.3) - 2025-06-14
+
+### 🐛 Bug Fixes
+
+- *(script)* Adjust GIT_AUTHOR_DATE format for compatibility - ([5d42ea9](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/5d42ea9ddbfa4f151c83fc16c652d55618f2ee04))
+
 ## [0.2.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.2.1..v0.2.2) - 2025-06-14
 
 ### 🚀 Features
