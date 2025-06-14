@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(workflows)* Update action to main branch - ([043a01c](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/043a01c2bacb78f3c872056f7d18aab4e845a401))
+- *(workflows)* Update action version in release workflow - ([9a0d65b](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/9a0d65b8eba3d1e06c88bc02f19e2dd5a7d0a731))
+
 ## [0.1.0] - 2025-06-14
 
 ### 🚀 Features
