@@ -10,5 +10,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Release
         uses: https://git.0xmax42.io/actions/auto-changelog-release-action@main

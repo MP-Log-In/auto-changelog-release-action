@@ -18,13 +18,37 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
     - name: Detect version change
       shell: bash
       id: detect
       run: |
         bash ${{ github.action_path }}/scripts/detect-version-change.sh
+
+    - name: Read CLIFF_VERSION
+      shell: bash
+      id: cliff_version
+      run: bash ${{ github.action_path }}/scripts/read-cliff-version.sh
+
+    - name: Install git-cliff
+      shell: bash
+      run: |
+        bash ${{ github.action_path }}/scripts/install-git-cliff.sh "${{ steps.cliff_version.outputs.version }}"
+
+    - name: Set up git
+      shell: bash
+      run: |
+        bash ${{ github.action_path }}/scripts/setup-git.sh \
+          "${{ inputs.author_name }}" \
+          "${{ inputs.author_email }}"
+
+    - name: Generate and commit changelog (unreleased)
+      if: steps.detect.outputs.version_changed == 'false' || github.ref != 'refs/heads/main'
+      shell: bash
+      run: bash ${{ github.action_path }}/scripts/generate-unreleased-changelog.sh
+
+    - name: Release from VERSION
+      if: steps.detect.outputs.version_changed == 'true' && github.ref == 'refs/heads/main'
+      shell: bash
+      env:
+        RELEASE_PUBLISH_TOKEN: ${{ inputs.token || '' }}
+      run: bash ${{ github.action_path }}/scripts/release-from-version.sh
