@@ -21,6 +21,10 @@ runs:
     - name: Detect version change
       shell: bash
       id: detect
+      env:
+        GITHUB_EVENT_BEFORE: ${{ github.event.before || '' }}
+        GITHUB_SHA: ${{ github.sha || '' }}
+        GITHUB_REF: ${{ github.ref || '' }}
       run: |
         bash ${{ github.action_path }}/scripts/detect-version-change.sh
 
