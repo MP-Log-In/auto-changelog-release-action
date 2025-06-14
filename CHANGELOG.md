@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(workflows)* Update release action version - ([79d7c5a](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/79d7c5a7eefda51f03a9bde0e933689c29d57567))
+
 ## [0.2.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.2.2..v0.2.3) - 2025-06-14
 
 ### 🐛 Bug Fixes
