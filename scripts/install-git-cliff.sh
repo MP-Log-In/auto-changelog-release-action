@@ -10,7 +10,7 @@ INSTALL_DIR="/usr/local/bin"
 VERSION="${1:-latest}"
 
 need() { command -v "$1" >/dev/null || { echo "$1 is missing"; exit 1; }; }
-need curl; need tar; need grep; need sed; need awk
+need curl; need tar; need grep; need sed; need awk; need jq
 
 # 1 Determine version → Fetch release JSON
 if [[ "$VERSION" == "latest" ]]; then
@@ -20,15 +20,23 @@ else
 fi
 
 echo "🔍 Fetching release info ($API_URL)…"
-JSON=$(curl -sL "$API_URL")
+JSON=$(curl -fsSL "$API_URL") || {
+  echo "❌ Failed to fetch release info"
+  exit 1
+}
 
-VERSION=$(echo "$JSON" | grep -m1 '"tag_name":' | sed -E 's/.*"v?([^\"]+)".*/\1/')
-ASSET_URL=$(echo "$JSON" |
-  grep -Eo '"browser_download_url": *"[^"]+' |
-  cut -d'"' -f4 |
+VERSION=$(jq -r '.tag_name' <<< "$JSON") || {
+  echo "❌ Could not extract version"
+  exit 1
+}
+
+ASSET_URL=$(jq -r '.assets[]?.browser_download_url' <<< "$JSON" |
   grep "${ARCH_OS}\.tar" | head -n1)
 
-[[ -z "$ASSET_URL" ]] && { echo "❌ Matching asset not found"; exit 1; }
+if [[ -z "$ASSET_URL" ]]; then
+  echo "❌ Matching asset not found for architecture ${ARCH_OS}"
+  exit 1
+fi
 
 ASSET_FILE=$(basename "$ASSET_URL")
 echo "📦 Downloading git-cliff v${VERSION} (${ASSET_FILE}) …"
