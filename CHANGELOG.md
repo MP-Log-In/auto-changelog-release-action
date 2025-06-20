@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.3.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.2.3..v0.3.0) - 2025-06-20
+
+### 🚀 Features
+
+- *(script)* Enhance git-cliff installer with jq support - ([5226899](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/522689977fe8883975e68add1b0cba2e685978ee))
 
 ### ⚙️ Miscellaneous Tasks
 
