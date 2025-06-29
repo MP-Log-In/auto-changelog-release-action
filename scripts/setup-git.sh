@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Open a log group for better readability in CI pipelines
-echo "::group::🔧 Git Author Setup"
-
 # Optional inputs (positionals) or fallback to environment variables
 AUTHOR_NAME="${1:-${CI_COMMIT_AUTHOR_NAME:-CI Bot}}"
 AUTHOR_EMAIL="${2:-${CI_COMMIT_AUTHOR_EMAIL:-ci@bot.none}}"
@@ -21,17 +18,12 @@ CONFIGURED_EMAIL=$(git config --global user.email)
 
 if [[ "$CONFIGURED_NAME" != "$AUTHOR_NAME" ]]; then
   echo "❌ Error: Git username was not set correctly!" >&2
-  echo "::endgroup::"
   exit 1
 fi
 
 if [[ "$CONFIGURED_EMAIL" != "$AUTHOR_EMAIL" ]]; then
   echo "❌ Error: Git email was not set correctly!" >&2
-  echo "::endgroup::"
   exit 1
 fi
 
 echo "✅ Git configuration completed successfully."
-
-# Close the log group
-echo "::endgroup::"
