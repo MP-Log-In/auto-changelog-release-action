@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.4.2..v0.4.3) - 2025-06-29
+
+### 🐛 Bug Fixes
+
+- *(script)* Use dynamic branch name for git push - ([27ee174](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/27ee1746dbc7b2c6c1564a04c024337ff158a9c5))
+
 ## [0.4.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.4.1..v0.4.2) - 2025-06-29
 
 ### 🐛 Bug Fixes
