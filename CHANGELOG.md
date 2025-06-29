@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.4](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.2..v0.3.4) - 2025-06-29
+
+### ⚙️ Miscellaneous Tasks
+
+- *(workflows)* Update action to specific version - ([a4ff409](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/a4ff409fd812a5ccd2291251de5cd2af9bb0e713))
+- *(scripts)* Update file permissions to executable - ([374f30a](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/374f30a50206a426b8de7a0b78cde9ad4194469f))
+
 ## [0.3.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.1..v0.3.2) - 2025-06-29
 
 ### 🚜 Refactor
