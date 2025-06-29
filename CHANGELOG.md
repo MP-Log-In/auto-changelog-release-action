@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ◀️ Revert
+
+- Improve CI readability with grouped git setup logs - ([039a14a](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/039a14a473493fd74fb61b60910652db3cfd5976))
+
 ## [0.3.4](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.2..v0.3.4) - 2025-06-29
 
 ### ⚙️ Miscellaneous Tasks
