@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.4.1..v0.4.2) - 2025-06-29
+
+### 🐛 Bug Fixes
+
+- *(action)* Update conditions for version detection - ([c25b2e9](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/c25b2e9cd551e923b84cd144b818940fd5e1ccff))
+
 ## [0.4.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.4.0..v0.4.1) - 2025-06-29
 
 ### 🐛 Bug Fixes
