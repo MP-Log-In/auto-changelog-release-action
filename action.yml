@@ -52,13 +52,13 @@ runs:
           "${{ inputs.author_email }}"
 
     - name: Generate and commit changelog (unreleased)
-      if: steps.detect.outputs.version_changed == 'false' || github.ref != 'refs/heads/main'
+      if: steps.detect.outputs.version_changed == 'false'
       shell: bash
       run: |
         ${{ github.action_path }}/scripts/generate-unreleased-changelog.sh
 
     - name: Release from VERSION
-      if: steps.detect.outputs.version_changed == 'true' && github.ref == 'refs/heads/main'
+      if: steps.detect.outputs.version_changed == 'true'
       shell: bash
       env:
         RELEASE_PUBLISH_TOKEN: ${{ inputs.token || '' }}
