@@ -6,14 +6,17 @@ GIT_REF="${GITHUB_REF:-}"
 COMMIT_BEFORE="${GITHUB_EVENT_BEFORE:-}"
 COMMIT_AFTER="${GITHUB_SHA:-}"
 VERSION_FILE="VERSION"
+ALLOW_NON_MAIN_RELEASE="${ALLOW_NON_MAIN_RELEASE:-false}"
 
 echo "🔍 Comparing commits:"
 echo "Before: $COMMIT_BEFORE"
 echo "After:  $COMMIT_AFTER"
+echo "Ref:    $GIT_REF"
+echo "Allow release from non-main branches: $ALLOW_NON_MAIN_RELEASE"
 
 # Check branch condition
-if [[ "$GIT_REF" != "refs/heads/main" ]]; then
-  echo "Not on 'main' branch – skipping version check."
+if [[ "$ALLOW_NON_MAIN_RELEASE" != "true" && "$GIT_REF" != "refs/heads/main" ]]; then
+  echo "🚫 Not on 'main' branch and non-main releases are disabled – skipping version check."
   echo "version_changed=false" >> "$GITHUB_OUTPUT"
   exit 0
 fi
