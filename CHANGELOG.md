@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.1..v0.3.2) - 2025-06-29
+
+### 🚜 Refactor
+
+- *(action)* Simplify script invocation syntax - ([b75e412](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/b75e4121928131c1a1c0cbdea954a4fd602edd1a))
+
 ## [0.3.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.0..v0.3.1) - 2025-06-29
 
 ### ⚙️ Miscellaneous Tasks
