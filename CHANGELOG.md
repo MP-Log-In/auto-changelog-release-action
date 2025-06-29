@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.6](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.5..v0.3.6) - 2025-06-29
+
+### ◀️ Revert
+
+- Integrate gha-timer for step timing - ([856565d](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/856565d87f2575d6883705ddde3d177555c1bd86))
+
 ## [0.3.5](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.4..v0.3.5) - 2025-06-29
 
 ### 🚀 Features
