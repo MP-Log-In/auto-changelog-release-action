@@ -18,6 +18,8 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: fulcrumgenomics/gha-timer@v1
+
     - name: Detect version change
       shell: bash
       id: detect
@@ -26,7 +28,17 @@ runs:
         GITHUB_SHA: ${{ github.sha || '' }}
         GITHUB_REF: ${{ github.ref || '' }}
       run: |
+        gha-timer start --name "Detect Version Change"
+
         ${{ github.action_path }}/scripts/detect-version-change.sh
+        exit_code=$?
+
+        if [[ $exit_code -eq 0 ]]; then
+          gha-timer elapsed --outcome success --name "Detect Version Change"
+        else
+          gha-timer elapsed --outcome failure --name "Detect Version Change"
+          exit $exit_code
+        fi
 
     - name: Read CLIFF_VERSION
       shell: bash
