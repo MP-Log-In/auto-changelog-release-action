@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.0..v0.3.1) - 2025-06-29
+
+### ⚙️ Miscellaneous Tasks
+
+- *(scripts)* Improve CI readability with grouped git setup logs - ([8a3960a](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/8a3960ad8712bc29823dc601a120a61582fa2a3b))
+
 ## [0.3.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.2.3..v0.3.0) - 2025-06-20
 
 ### 🚀 Features
