@@ -14,7 +14,7 @@ inputs:
     description: "Commit-Autore-Mail"
     required: false
     default: ""
-  allow-non-main-release:
+  allow_non_main_release:
     description: "Allow publishing releases from branches other than 'main'."
     required: false
     default: "false"
@@ -29,7 +29,7 @@ runs:
         GITHUB_EVENT_BEFORE: ${{ github.event.before || '' }}
         GITHUB_SHA: ${{ github.sha || '' }}
         GITHUB_REF: ${{ github.ref || '' }}
-        ALLOW_NON_MAIN_RELEASE: ${{ inputs.allow-non-main-release }}
+        ALLOW_NON_MAIN_RELEASE: ${{ inputs.allow_non_main_release }}
       run: |
         ${{ github.action_path }}/scripts/detect-version-change.sh
 
