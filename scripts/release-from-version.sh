@@ -52,6 +52,7 @@ VERSION_FILE="VERSION"
 CHANGELOG_FILE="CHANGELOG.md"
 CLIFF_CONFIG="cliff.toml"
 RELEASE_BODY_TMP="$(mktemp)"
+GIT_BRANCH="${GITHUB_REF##refs/heads/}"
 
 # === Step 1: Read version ===
 if [[ ! -f "$VERSION_FILE" ]]; then
@@ -87,7 +88,7 @@ if git diff --cached --quiet; then
 else
   echo "📝 Committing updated changelog"
   git commit -m "chore(changelog): update changelog for v$VERSION"
-  git push origin main
+  git push origin "$GIT_BRANCH"
 fi
 
 # === Step 4: Create tag if necessary ===
