@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.6..v0.4.0) - 2025-06-29
+
+### 🚀 Features
+
+- *(action)* Add support for non-main branch releases - ([1d9659b](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/1d9659b6df0d63ed17432e677ee77a4c17d2f2f3))
+
 ## [0.3.6](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.5..v0.3.6) - 2025-06-29
 
 ### ◀️ Revert
