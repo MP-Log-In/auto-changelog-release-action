@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.4.0..v0.4.1) - 2025-06-29
+
+### 🐛 Bug Fixes
+
+- *(action)* Standardize input key naming - ([cbcd5e2](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/cbcd5e2ab7e7f2498021d5043da9999f62dcf44d))
+
 ## [0.4.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.3.6..v0.4.0) - 2025-06-29
 
 ### 🚀 Features
