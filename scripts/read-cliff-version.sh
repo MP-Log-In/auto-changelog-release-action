@@ -19,4 +19,3 @@ fi
 
 echo "version=${VERSION_LINE:-}" >> "$GITHUB_OUTPUT"
 echo "$VERSION_LINE"
-n
