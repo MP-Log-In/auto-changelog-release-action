@@ -11,7 +11,7 @@ function run(script, args = []) {
 }
 
 function scriptPath(...segments) {
-  return path.join(__dirname, "scripts", ...segments);
+  return path.join(__dirname, "..", "scripts", ...segments);
 }
 
 function main() {

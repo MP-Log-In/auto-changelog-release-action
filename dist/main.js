@@ -15,7 +15,7 @@ function setEnv(key, value) {
 }
 
 function main() {
-  const script = path.join(__dirname, "scripts", "detect-version-change.sh");
+  const script = path.join(__dirname, "..", "scripts", "detect-version-change.sh");
 
 
   run(script);
