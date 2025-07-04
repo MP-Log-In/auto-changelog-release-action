@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- *(actions)* Add post-step support for composite actions - ([543b311](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/543b311d1eb1fb83e8e0ef4014c549e61a863038))
+
 ## [0.4.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.4.2..v0.4.3) - 2025-06-29
 
 ### 🐛 Bug Fixes
