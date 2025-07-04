@@ -1,46 +1,29 @@
-name: "Auto Changelog & Release"
-description: "Detects version bump and, in post-step, writes changelog or publishes release."
+name: Auto Changelog & Release
+description: One-stop composite action
 
 inputs:
-  token: { description: "Gitea/GitHub PAT", default: "" }
-  author_name: { description: "Commit author", default: "" }
-  author_email: { description: "Commit e-mail", default: "" }
+  token:
+    description: "Gitea/GitHub PAT für Release-API"
+    required: false
+    default: ""
+  author_name:
+    description: "Commit-Autorname"
+    required: false
+    default: ""
+  author_email:
+    description: "Commit-Autore-Mail"
+    required: false
+    default: ""
   allow_non_main_release:
-    description: "Allow release on branches ≠ main"
+    description: "Allow publishing releases from branches other than 'main'."
+    required: false
     default: "false"
 
 outputs:
   release:
-    description: "true if VERSION changed"
-    value: ${{ steps.detect.outputs.version_changed }}
+    description: "Whether a release should be made (true/false)"
 
 runs:
-  using: composite
-  steps:
-    - id: detect
-      name: Detect version change + queue post work
-      uses: ./with-post-step
-      with:
-        key: AUTOCHANGELOG
-        #################### MAIN ####################
-        main: |
-          ${{ github.action_path }}/scripts/detect-version-change.sh
-        #################### POST ####################
-        post: |
-          #!/usr/bin/env bash
-          set -euo pipefail
-          # VERSION_CHANGED kommt aus detect-Script via $GITHUB_ENV
-          CLIFF_VERSION="$(
-            ${{ github.action_path }}/scripts/read-cliff-version.sh | tail -n1
-          )"
-          "${{ github.action_path }}/scripts/install-git-cliff.sh" "$CLIFF_VERSION"
-          "${{ github.action_path }}/scripts/setup-git.sh" \
-            "${{ inputs.author_name }}" "${{ inputs.author_email }}"
-          if [[ "${VERSION_CHANGED:-false}" == "true" ]]; then
-            # --- Release-Pfad ---
-            RELEASE_PUBLISH_TOKEN='${{ inputs.token }}' \
-              "${{ github.action_path }}/scripts/release-from-version.sh"
-          else
-            # --- Nur Changelog aktualisieren ---
-            "${{ github.action_path }}/scripts/generate-unreleased-changelog.sh"
-          fi
+  using: "node20"
+  main: "dist/main.js"
+  post: "dist/post.js"
