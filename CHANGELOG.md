@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.8](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.7..v2.0.8) - 2025-07-04
+
+### 🚀 Features
+
+- *(scripts)* Add release flag to version change checks - ([967e4ac](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/967e4ac3014fe9273edc81e40e00a8acb324d294))
+
+### 🐛 Bug Fixes
+
+- *(scripts)* Remove redundant newline in output - ([f512d3f](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/f512d3ff6da44a83da279cf32484497bf3cc8f22))
+
 ## [2.0.7](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.6..v2.0.7) - 2025-07-04
 
 ### 🐛 Bug Fixes
