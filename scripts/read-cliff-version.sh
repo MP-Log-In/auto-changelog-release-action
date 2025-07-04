@@ -12,10 +12,11 @@ fi
 VERSION_LINE=$(awk -F '=' '/^# CLIFF_VERSION=/ { gsub(/[" ]/, "", $2); print $2 }' "$CLIFF_TOML" || true)
 
 if [[ -n "$VERSION_LINE" ]]; then
-  echo "✅ Extracted CLIFF_VERSION: $VERSION_LINE"
+  echo "✅ Extracted CLIFF_VERSION: $VERSION_LINE" >&2
 else
-  echo "⚠️  No CLIFF_VERSION found in $CLIFF_TOML"
+  echo "⚠️  No CLIFF_VERSION found in $CLIFF_TOML" >&2
 fi
 
-# Output für GitHub Actions / Composite Action
 echo "version=${VERSION_LINE:-}" >> "$GITHUB_OUTPUT"
+echo "$VERSION_LINE"
+n

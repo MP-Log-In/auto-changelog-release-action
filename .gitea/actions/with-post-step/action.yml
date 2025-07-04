@@ -1,0 +1,11 @@
+name: "with-post-step"
+description: "Runs a main command and, afterwards, a post command."
+inputs:
+  main: { description: "Command for the main step", required: true }
+  post: { description: "Command for the post step", required: true }
+  key: { description: "State key", default: POST }
+
+runs:
+  using: node20
+  main: main.js
+  post: main.js
