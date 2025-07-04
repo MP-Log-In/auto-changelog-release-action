@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.5](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.4..v2.0.5) - 2025-07-04
+
+### 🐛 Bug Fixes
+
+- *(script)* Correct path formatting in version detection script - ([a753d6a](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/a753d6aa3b45d4dab36e4ef56bbc71046eb032c9))
+
 ## [2.0.4](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.3..v2.0.4) - 2025-07-04
 
 ### 🐛 Bug Fixes
