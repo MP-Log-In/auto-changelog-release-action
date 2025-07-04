@@ -16,7 +16,7 @@ function setEnv(key, value) {
 
 function main() {
   const actionPath = process.env.GITHUB_ACTION_PATH || ".";
-  const script = path.join(".", ".scripts/detect-version-change.sh");
+  const script = path.join("./", "scripts/detect-version-change.sh");
 
   run(script);
 
