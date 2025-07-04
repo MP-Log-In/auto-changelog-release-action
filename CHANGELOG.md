@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.2..v2.0.3) - 2025-07-04
+
+### 🚜 Refactor
+
+- *(action)* Simplify composite action structure - ([8df31fb](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/8df31fb97ebd73e71b2f8a9dc925fe8a81192be3))
+
 ## [2.0.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.1..v2.0.2) - 2025-07-04
 
 ### 🚜 Refactor
