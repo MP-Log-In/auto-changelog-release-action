@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.9](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.8..v2.0.9) - 2025-07-04
+
+### 🚀 Features
+
+- *(exec)* Add support for custom working directories - ([7892a1f](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/7892a1fa7c2451ea947c11f0cf71ba189306d708))
+
 ## [2.0.8](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.7..v2.0.8) - 2025-07-04
 
 ### 🚀 Features
