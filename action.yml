@@ -19,7 +19,7 @@ runs:
   steps:
     - id: detect
       name: Detect version change + queue post work
-      uses: ./.gitea/actions/with-post-step
+      uses: ./with-post-step
       with:
         key: AUTOCHANGELOG
         #################### MAIN ####################
