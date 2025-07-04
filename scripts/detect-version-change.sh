@@ -18,6 +18,7 @@ echo "Allow release from non-main branches: $ALLOW_NON_MAIN_RELEASE"
 if [[ "$ALLOW_NON_MAIN_RELEASE" != "true" && "$GIT_REF" != "refs/heads/main" ]]; then
   echo "🚫 Not on 'main' branch and non-main releases are disabled – skipping version check."
   echo "version_changed=false" >> "$GITHUB_OUTPUT"
+  echo "release=false" >> "$GITHUB_OUTPUT"
   exit 0
 fi
 
@@ -28,8 +29,10 @@ if git diff --name-only "$COMMIT_BEFORE" "$COMMIT_AFTER" | grep -q "^$VERSION_FI
   echo "✅ VERSION file was changed"
   echo "VERSION_CHANGED=true" >> "$GITHUB_ENV"
   echo "version_changed=true" >> "$GITHUB_OUTPUT"
+  echo "release=true" >> "$GITHUB_OUTPUT"
 else
   echo "ℹ️ VERSION file not changed"
   echo "VERSION_CHANGED=false" >> "$GITHUB_ENV"
   echo "version_changed=false" >> "$GITHUB_OUTPUT"
+  echo "release=false" >> "$GITHUB_OUTPUT"
 fi
