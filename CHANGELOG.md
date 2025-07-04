@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.1..v2.0.2) - 2025-07-04
+
+### 🚜 Refactor
+
+- *(actions)* Simplify action path structure - ([30f83b0](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/30f83b08eecabe17b7d1f53aaf0bb4d0cdd82256))
+
 ## [2.0.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.4.3..v2.0.1) - 2025-07-04
 
 ### 🚀 Features
