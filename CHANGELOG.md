@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.4](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.3..v2.0.4) - 2025-07-04
+
+### 🐛 Bug Fixes
+
+- *(main)* Update script path to ensure correct resolution - ([df27af7](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/df27af76add1dc4b50ead8015976b5e96b177661))
+
 ## [2.0.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.2..v2.0.3) - 2025-07-04
 
 ### 🚜 Refactor
