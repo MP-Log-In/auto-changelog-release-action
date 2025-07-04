@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.6](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.5..v2.0.6) - 2025-07-04
+
+### 🚜 Refactor
+
+- *(scripts)* Simplify path management and command execution - ([18b493d](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/18b493d524630e8da304e2a8ec098415fa9140e1))
+
 ## [2.0.5](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.4..v2.0.5) - 2025-07-04
 
 ### 🐛 Bug Fixes
