@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🐛 Bug Fixes
+
+- *(path)* Correct script directory resolution - ([0a562d4](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/0a562d4e029193c4e39926d1ff220a6a37a6e049))
+
 ## [2.0.6](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.5..v2.0.6) - 2025-07-04
 
 ### 🚜 Refactor
