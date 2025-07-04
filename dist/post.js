@@ -7,6 +7,7 @@ function run(script, args = []) {
     stdio: "inherit",
     shell: true,
     env: process.env,
+    cwd: process.env.GITHUB_WORKSPACE || process.cwd(),
   });
 }
 

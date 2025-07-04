@@ -3,7 +3,11 @@ const path = require("path");
 const fs = require("fs");
 
 function run(script) {
-  cp.execFileSync(script, { stdio: "inherit", shell: true });
+  cp.execFileSync(script, { 
+    stdio: "inherit", 
+    shell: true,
+    cwd: process.env.GITHUB_WORKSPACE || process.cwd()
+  });
 }
 
 function exportOutput(key, value) {
