@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(config)* Improve child commit handling in merge template - ([65462f5](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/65462f5a1495aa45afd727a962126db953ab75a5))
+
 ## [1.0.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.0.0..v1.0.1) - 2025-09-27
 
 ### ⚙️ Miscellaneous Tasks
