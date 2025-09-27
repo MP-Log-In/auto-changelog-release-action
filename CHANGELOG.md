@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - *(ci)* [**breaking**] Enhance changelog generation with context augmentation - ([8de8b47](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/8de8b470386cf9f21cec660ba71d840ea6786231))
 
+### 🐛 Bug Fixes
+
+- *(release)* Fix changelog generation pipe usage - ([fedcc1f](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/fedcc1ff41b9535f5002d046427dd640b647bde4))
+
 ### ⚙️ Miscellaneous Tasks
 
 - *(release)* Update action version in workflow - ([73a1b5c](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/73a1b5cc243248b50275b2368a4cd92bbb4a1a8e))
