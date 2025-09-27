@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(scripts)* Check for existing Python installation - ([94980be](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/94980be3e5e5827b75edf9abeab0987709fa3122))
+
 ## [1.0.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.4.3..v1.0.0) - 2025-09-27
 
 ### 🚀 Features
