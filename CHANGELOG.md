@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - *(ci)* [**breaking**] Enhance changelog generation with context augmentation - ([8de8b47](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/8de8b470386cf9f21cec660ba71d840ea6786231))
 
+### ⚙️ Miscellaneous Tasks
+
+- *(ci)* Allow non-main branch releases - ([121ea5b](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/121ea5b57a587626a036738c23e2983380470dd7))
+
 ## [0.4.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v0.4.2..v0.4.3) - 2025-06-29
 
 ### 🐛 Bug Fixes
