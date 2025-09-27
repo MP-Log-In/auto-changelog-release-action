@@ -44,6 +44,11 @@ runs:
       run: |
         ${{ github.action_path }}/scripts/install-git-cliff.sh "${{ steps.cliff_version.outputs.version }}"
 
+    - name: Install Python
+      shell: bash
+      run: |
+        ${{ github.action_path }}/scripts/install-python.sh
+
     - name: Set up git
       shell: bash
       run: |
