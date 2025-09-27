@@ -65,8 +65,8 @@ echo "📦 Version: $VERSION"
 # === Step 2: Generate changelog for release ===
 echo "📄 Generating changelog for tag v$VERSION"
 git-cliff -c "$CLIFF_CONFIG" -t "v$VERSION" --context \
-  "${GITHUB_ACTION_PATH}/scripts/augment_context.py" \
-  git-cliff -c "$CLIFF_CONFIG"  -t "v$VERSION" --from-context - -o "$CHANGELOG_FILE"
+|   "${GITHUB_ACTION_PATH}/scripts/augment_context.py" \
+|   git-cliff -c "$CLIFF_CONFIG"  -t "v$VERSION" --from-context - -o "$CHANGELOG_FILE"
 
 ESCAPED_VERSION="$(echo "$VERSION" | sed 's/\./\\./g')"
 
