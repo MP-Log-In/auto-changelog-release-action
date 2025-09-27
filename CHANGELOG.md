@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### 📚 Documentation
+
+- Add changelog improvement ideas to TODO file - ([f54df9f](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/f54df9fbc42e3fc453042a1f2c36f7cd12e38c41))
+
 ### ⚙️ Miscellaneous Tasks
 
 - *(config)* Improve child commit handling in merge template - ([65462f5](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/65462f5a1495aa45afd727a962126db953ab75a5))
