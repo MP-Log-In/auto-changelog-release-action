@@ -2,6 +2,11 @@
 import json
 import subprocess
 import sys
+import re
+
+def extract_type(raw_message: str) -> str | None:
+    m = re.match(r"^(\w+)(?:\([^)]+\))?:", raw_message.strip())
+    return m.group(1) if m else None
 
 def git_commits_between(parent, merge):
     """Return list of commit hashes between parent and merge (exclusive of parent, inclusive of merge)."""
@@ -34,6 +39,8 @@ def main(path=None):
             ).strip().split()
             merge_id, *parent_ids = parents
 
+            parent_type = extract_type(c["raw_message"])
+
             if len(parent_ids) >= 2:
                 mainline = parent_ids[0]
                 children_ids = git_commits_between(mainline, merge_id)
@@ -41,7 +48,13 @@ def main(path=None):
                 children = []
                 for cid in children_ids:
                     if cid in commits_by_id:
-                        children.append(commits_by_id[cid])
+                        child = commits_by_id[cid]
+                        child_type = extract_type(child["raw_message"])
+                        if child_type and parent_type and child_type != parent_type:
+                            if not child.get("extra") or not isinstance(child["extra"], dict):
+                                child["extra"] = {}
+                            child["extra"]["mismatch_type"] = child_type
+                        children.append(child)
                         consumed.add(cid)
 
                 if not c.get("extra") or not isinstance(c["extra"], dict):
