@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### 🚀 Features
+
+- *(scripts)* Add type extraction and mismatch detection logic - ([e8426bb](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/e8426bb839dd29f807f232efe5f7bf829ec4f9f1))
+
 ### 📚 Documentation
 
 - Add changelog improvement ideas to TODO file - ([f54df9f](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/f54df9fbc42e3fc453042a1f2c36f7cd12e38c41))
