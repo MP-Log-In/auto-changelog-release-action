@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- *(changelog)* Add support for indented commit bodies - ([a83ee3e](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/a83ee3e88f87c3d99368ee1e62f45f4f30dd46c1))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(config)* Adjust formatting and improve changelog parsing - ([d8bf074](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/d8bf0743f7ece328d76a3cde52aac75b1691ada6))
+
 ## [1.1.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.0.1..v1.1.0) - 2025-09-29
 
 ### 🚀 Features
