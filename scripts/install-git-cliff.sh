@@ -7,7 +7,11 @@ set -euo pipefail
 REPO="orhun/git-cliff"
 ARCH_OS="x86_64-unknown-linux-gnu"
 INSTALL_DIR="/usr/local/bin"
-VERSION="${1:-latest}"
+if [[ -z "${1:-}" ]]; then
+  VERSION="latest"
+else
+  VERSION="$1"
+fi
 
 need() { command -v "$1" >/dev/null || { echo "$1 is missing"; exit 1; }; }
 need curl; need tar; need grep; need sed; need awk; need jq
