@@ -39,6 +39,11 @@ runs:
       run: |
         ${{ github.action_path }}/scripts/read-cliff-version.sh
 
+    - name: Generate git-cliff config
+      shell: bash
+      run: |
+        ${{ github.action_path }}/scripts/generate-git-cliff-config.sh
+
     - name: Install git-cliff
       shell: bash
       run: |
