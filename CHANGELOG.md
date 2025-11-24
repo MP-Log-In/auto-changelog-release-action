@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🐛 Bug Fixes
+
+- *(scripts)* Improve version argument handling in install script - ([e050996](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/e050996fd4d153f59cce0c9483851cae4963908d))
+
 ## [1.2.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.2.0..v1.2.1) - 2025-11-24
 
 ### 🐛 Bug Fixes
