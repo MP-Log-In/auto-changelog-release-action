@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features
 
+- Add templated git-cliff config generation to workflow - ([096ecb5](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/096ecb582296cdd479a32d5eb58512af76621102))
 - *(changelog)* Add support for indented commit bodies - ([a83ee3e](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/a83ee3e88f87c3d99368ee1e62f45f4f30dd46c1))
 
 ### ⚙️ Miscellaneous Tasks
