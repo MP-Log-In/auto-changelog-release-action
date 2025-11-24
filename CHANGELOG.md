@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🐛 Bug Fixes
+
+- *(ci)* Use ACTION_PATH for git-cliff config generation - ([0646778](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/064677870b9ebac04d2f264fede191205faa0614))
+
 ## [1.2.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.2.1..v1.2.2) - 2025-11-24
 
 ### 🐛 Bug Fixes
