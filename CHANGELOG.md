@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.4](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.2.3..v1.2.4) - 2025-12-14
+
+### 🐛 Bug Fixes
+
+- *(config)* Update template to generalize gitea remote and add postprocessors - ([51cfcdc](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/51cfcdc6488c878764193c33121144564e76c802))
+
 ## [1.2.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.2.2..v1.2.3) - 2025-11-24
 
 ### 🐛 Bug Fixes
