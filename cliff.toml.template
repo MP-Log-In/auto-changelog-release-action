@@ -4,15 +4,13 @@
 # Lines starting with "#" are comments.
 # Configuration options are organized into tables and keys.
 # See documentation for more information on available options.
-# [remote.gitea] # Disabled by default
-# owner = "%OWNER%"
-# repo = "%REPO%"
+[remote.gitea]
+owner = "%OWNER%"
+repo = "%REPO%"
 
 [changelog]
 postprocessors = [
     { pattern = '<GITEA_URL>', replace = "https://git.0xmax42.io" }, # replace gitea url
-    { pattern = '<OWNER>', replace = "%OWNER%" }, # replace owner
-    { pattern = '<REPO>', replace = "%REPO%" }, # replace repo
 ]
 
 header = """
@@ -22,7 +20,7 @@ All notable changes to this project will be documented in this file.\n
 
 body = """
 {%- macro remote_url() -%}
-  <GITEA_URL>/<OWNER>/<REPO>
+  <GITEA_URL>/{{ remote.gitea.owner }}/{{ remote.gitea.repo }}
 {%- endmacro -%}
 
 {%- macro indent(text, prefix="  ") -%}
