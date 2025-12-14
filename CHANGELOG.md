@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.7](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.2.6..v1.2.7) - 2025-12-14
+
+### ⚙️ Miscellaneous Tasks
+
+- *(scripts)* Set default git-cliff version to 2.10.1 - ([5cb6dbd](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/5cb6dbddfc37b72fb647d7649aefc59e3dc01345))
+
 ## [1.2.4](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.2.3..v1.2.4) - 2025-12-14
 
 ### 🐛 Bug Fixes
