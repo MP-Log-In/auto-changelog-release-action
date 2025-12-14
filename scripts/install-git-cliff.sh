@@ -8,7 +8,7 @@ REPO="orhun/git-cliff"
 ARCH_OS="x86_64-unknown-linux-gnu"
 INSTALL_DIR="/usr/local/bin"
 if [[ -z "${1:-}" ]]; then
-  VERSION="latest"
+  VERSION="2.10.1"
 else
   VERSION="$1"
 fi
