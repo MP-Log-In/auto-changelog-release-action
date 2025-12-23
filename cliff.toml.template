@@ -10,7 +10,7 @@ repo = "%REPO%"
 
 [changelog]
 postprocessors = [
-    { pattern = '<GITEA_URL>', replace = "https://git.0xmax42.io" }, # replace gitea url
+    { pattern = '<GITEA_URL>', replace = "%GITEA_SERVER_URL%" }, # replace gitea url
 ]
 
 header = """
