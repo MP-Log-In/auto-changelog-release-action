@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.8](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.2.7..v1.2.8) - 2025-12-23
+
+### 🐛 Bug Fixes
+
+- *(ci)* Update GITEA_API_URL to use server_url without /api/v1 - ([fc390ce](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/fc390ce048b2d3ef22ca27ab2babd5edb2dce41c))
+
 ## [1.2.7](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.2.6..v1.2.7) - 2025-12-14
 
 ### ⚙️ Miscellaneous Tasks
