@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- Update commit parser group ordering and skip rules - ([8beb204](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/8beb2042f99e409ca7a1f19f70bbbad1fff83e82))
+
 ## [1.2.8](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.2.7..v1.2.8) - 2025-12-23
 
 ### 🐛 Bug Fixes
