@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.3.0..v1.3.1) - 2025-12-23
+
+### 🐛 Bug Fixes
+
+- Reorder and update commit parser rules in config - ([0e7b51e](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/0e7b51e9742b5f548a7c2e9db7e6809e082b9100))
+
 ## [1.3.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.2.8..v1.3.0) - 2025-12-23
 
 ### 🚀 Features
