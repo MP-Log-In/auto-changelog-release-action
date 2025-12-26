@@ -23,11 +23,9 @@ def load_context(path=None):
     else:
         return json.load(sys.stdin)
 
-def main(path=None):
-    context = load_context(path)
-    commits = context[0]["commits"]
+def augment_entry_commits(entry):
+    commits = entry.get("commits") or []
     commits_by_id = {c["id"]: c for c in commits}
-
     new_commits = []
     consumed = set()
 
@@ -63,8 +61,14 @@ def main(path=None):
 
         new_commits.append(c)
 
-    filtered = [c for c in new_commits if c["id"] not in consumed]
-    context[0]["commits"] = filtered
+    entry["commits"] = [c for c in new_commits if c["id"] not in consumed]
+
+def main(path=None):
+    context = load_context(path)
+
+    for entry in context:
+        if isinstance(entry, dict) and "commits" in entry:
+            augment_entry_commits(entry)
 
     json.dump(context, sys.stdout, indent=4)
 
