@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.3.1..v1.3.2) - 2025-12-26
+
+### 🐛 Bug Fixes
+
+- *(scripts)* Handle multiple context entries when augmenting commits - ([cd76af2](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/cd76af27bb4ebc10838d48be926b25b26c7e3d7c))
+
 ## [1.3.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.3.0..v1.3.1) - 2025-12-23
 
 ### 🐛 Bug Fixes
