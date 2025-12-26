@@ -35,8 +35,7 @@ body = """
 {% if version %}\
     {% if previous.version %}\
         ## [{{ version | trim_start_matches(pat="v") }}]\
-        {% if is_prerelease %} (pre-release){% endif %}\
-          ({{ self::remote_url() }}/compare/{{ previous.version }}..{{ version }}) - {{ timestamp | date(format="%Y-%m-%d") }}
+          ({{ self::remote_url() }}/compare/{{ previous.version }}..{{ version }}){% if is_prerelease %} (pre-release){% endif %} - {{ timestamp | date(format="%Y-%m-%d") }}
     {% else %}\
         ## [{{ version | trim_start_matches(pat="v") }}]{% if is_prerelease %} (pre-release){% endif %} - {{ timestamp | date(format="%Y-%m-%d") }}
     {% endif %}\
