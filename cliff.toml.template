@@ -44,7 +44,7 @@ body = """
     ### {{ group | striptags | trim | upper_first }}\n
     {% for commit in commits %}\
         {% if commit.merge_commit %}\
-    - 🔀 **{{ commit.message | upper_first }}** - \
+    - 🔀 {% if commit.scope %}*({{ commit.scope }})* {% endif %}**{{ commit.message | upper_first }}** - \
     ([{{ commit.id | truncate(length=7, end="") }}]({{ self::remote_url() }}/commit/{{ commit.id }}))\
     {% if commit.body %}\n{{ self::indent(text=commit.body, prefix="  ") }}{% endif %}\
         {% if commit.extra and commit.extra.children %}\
