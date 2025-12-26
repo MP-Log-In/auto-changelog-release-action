@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- *(release)* Support pre-release tagging and changelog rendering - ([5a75231](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/5a7523109f3204e2e5a33037927b2e104eeab67f))
+
+### 🚜 Refactor
+
+- *(scripts)* Rename augment_entry_commits to augment_merge_commits - ([154a95b](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/154a95ba2097842073fe545f4ec1c07d3f6ff5ce))
+
+### 🎨 Styling
+
+- *(cliff)* Show commit scope in merge entry template - ([88afb25](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/88afb2530c7078618626ebab835fceddf42376a9))
+
 ## [1.3.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.3.1..v1.3.2) - 2025-12-26
 
 ### 🐛 Bug Fixes
