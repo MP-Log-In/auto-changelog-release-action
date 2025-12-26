@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.4.0..v1.4.1) - 2025-12-26
+
+### 🐛 Bug Fixes
+
+- *(cliff)* Adjust prerelease label placement in compare header - ([f8dee69](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/f8dee69cf3b0641b5a30ae775c41bf450b3a1cb5))
+
 ## [1.4.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.3.2..v1.4.0) - 2025-12-26
 
 ### 🚀 Features
