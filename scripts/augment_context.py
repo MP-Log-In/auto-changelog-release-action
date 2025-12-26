@@ -23,7 +23,7 @@ def load_context(path=None):
     else:
         return json.load(sys.stdin)
 
-def augment_entry_commits(entry):
+def augment_merge_commits(entry):
     commits = entry.get("commits") or []
     commits_by_id = {c["id"]: c for c in commits}
     new_commits = []
@@ -68,7 +68,7 @@ def main(path=None):
 
     for entry in context:
         if isinstance(entry, dict) and "commits" in entry:
-            augment_entry_commits(entry)
+            augment_merge_commits(entry)
 
     json.dump(context, sys.stdout, indent=4)
 
