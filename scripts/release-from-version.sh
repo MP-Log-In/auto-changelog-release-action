@@ -2,7 +2,7 @@
 set -euo pipefail
 
 create_release() {
-  local -r owner="$1" repo="$2" token="$3" version="$4" body_file="$5"
+  local -r owner="$1" repo="$2" token="$3" version="$4" body_file="$5" prerelease="${6:-false}"
   local -i max_attempts=3 delay=5 attempt
   local http status
 
@@ -10,22 +10,23 @@ create_release() {
   local body_json
   body_json=$(tail -n +2 "$body_file" | jq -Rs .)
 
-  for (( attempt=1; attempt<=max_attempts; attempt++ )); do
+  for ((attempt = 1; attempt <= max_attempts; attempt++)); do
     echo "🚀 Try $attempt/$max_attempts: creating release v$version …"
 
-    http=$(curl -sS \
-      -H "Authorization: token $token" \
-      -H "Content-Type: application/json" \
-      -o resp.json -w '%{http_code}' \
-      -X POST "$GITHUB_API_URL/repos/$owner/$repo/releases" \
-      -d @- <<EOF
+    http=$(
+      curl -sS \
+        -H "Authorization: token $token" \
+        -H "Content-Type: application/json" \
+        -o resp.json -w '%{http_code}' \
+        -X POST "$GITHUB_API_URL/repos/$owner/$repo/releases" \
+        -d @- <<EOF
 {
   "tag_name": "v$version",
   "target_commitish": "main",
   "name": "Release v$version",
   "body": $body_json,
   "draft": false,
-  "prerelease": false
+  "prerelease": $prerelease
 }
 EOF
     )
@@ -43,8 +44,11 @@ EOF
 
     echo "⚠️  Release attempt failed (HTTP $status)"
     cat resp.json
-    [[ $attempt -lt $max_attempts ]] || { echo "❌ Giving up."; return 1; }
-    sleep $((delay*attempt))   # Back-off: 5 s, 10 s, 15 s …
+    [[ $attempt -lt $max_attempts ]] || {
+      echo "❌ Giving up."
+      return 1
+    }
+    sleep $((delay * attempt)) # Back-off: 5 s, 10 s, 15 s …
   done
 }
 
@@ -64,9 +68,9 @@ echo "📦 Version: $VERSION"
 
 # === Step 2: Generate changelog for release ===
 echo "📄 Generating changelog for tag v$VERSION"
-git-cliff -c "$CLIFF_CONFIG" -t "v$VERSION" --context \
-|   "${GITHUB_ACTION_PATH}/scripts/augment_context.py" \
-|   git-cliff -c "$CLIFF_CONFIG"  -t "v$VERSION" --from-context - -o "$CHANGELOG_FILE"
+git-cliff -c "$CLIFF_CONFIG" -t "v$VERSION" --context |
+  "${GITHUB_ACTION_PATH}/scripts/augment_context.py" |
+  git-cliff -c "$CLIFF_CONFIG" -t "v$VERSION" --from-context - -o "$CHANGELOG_FILE"
 
 ESCAPED_VERSION="$(echo "$VERSION" | sed 's/\./\\./g')"
 
@@ -81,7 +85,7 @@ awk -v ver="$ESCAPED_VERSION" '
   }
   $0 ~ "^## \\[" && $0 !~ "^## \\[" ver "\\]" { print_flag=0 }
   print_flag
-' "$CHANGELOG_FILE" > "$RELEASE_BODY_TMP"
+' "$CHANGELOG_FILE" >"$RELEASE_BODY_TMP"
 
 # === Step 3: Commit changelog ===
 git add "$CHANGELOG_FILE"
@@ -116,6 +120,12 @@ if [[ -z "${RELEASE_PUBLISH_TOKEN:-}" ]]; then
   echo
 fi
 
-create_release "$OWNER" "$REPO" "$TOKEN" "$VERSION" "$RELEASE_BODY_TMP"
+# Check if version contains `-pre.` indicating a pre-release
+if [[ "$VERSION" == *"-pre."* ]]; then
+  echo "ℹ️  Detected pre-release version."
+  create_release "$OWNER" "$REPO" "$TOKEN" "$VERSION" "$RELEASE_BODY_TMP" true
+else
+  create_release "$OWNER" "$REPO" "$TOKEN" "$VERSION" "$RELEASE_BODY_TMP"
+fi
 
 echo "🎉 Workflow finished successfully."

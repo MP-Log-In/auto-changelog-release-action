@@ -63,12 +63,27 @@ def augment_merge_commits(entry):
 
     entry["commits"] = [c for c in new_commits if c["id"] not in consumed]
 
+def flag_pre_release(entry):
+    version = entry.get("version")
+    if not isinstance(version, str):
+        return
+
+    match = re.match(r"^(v\d+\.\d+\.\d+)(-pre\.\d+)?$", version.strip())
+    if not match:
+        return
+
+    extra = entry.get("extra") if isinstance(entry.get("extra"), dict) else {}
+    extra["pre_release"] = match.group(2) is not None
+    entry["extra"] = extra
+
 def main(path=None):
     context = load_context(path)
 
     for entry in context:
         if isinstance(entry, dict) and "commits" in entry:
             augment_merge_commits(entry)
+        if isinstance(entry, dict):
+            flag_pre_release(entry)
 
     json.dump(context, sys.stdout, indent=4)
 

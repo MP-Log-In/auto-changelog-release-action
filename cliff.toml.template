@@ -23,6 +23,8 @@ body = """
   <GITEA_URL>/{{ remote.gitea.owner }}/{{ remote.gitea.repo }}
 {%- endmacro -%}
 
+{%- set is_prerelease = extra and extra.pre_release -%}
+
 {%- macro indent(text, prefix="  ") -%}
     {%- set lines = text | split(pat="\n") -%}
     {%- for l in lines -%}
@@ -33,9 +35,10 @@ body = """
 {% if version %}\
     {% if previous.version %}\
         ## [{{ version | trim_start_matches(pat="v") }}]\
+        {% if is_prerelease %} (pre-release){% endif %}\
           ({{ self::remote_url() }}/compare/{{ previous.version }}..{{ version }}) - {{ timestamp | date(format="%Y-%m-%d") }}
     {% else %}\
-        ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+        ## [{{ version | trim_start_matches(pat="v") }}]{% if is_prerelease %} (pre-release){% endif %} - {{ timestamp | date(format="%Y-%m-%d") }}
     {% endif %}\
 {% else %}\
     ## [unreleased]
@@ -111,7 +114,7 @@ commit_parsers = [
     { message = ".*", group = "<!-- 11 -->💼 Other" },
 ]
 # Regex to select git tags that represent releases.
-tag_pattern = "v[0-9]+\\.[0-9]+\\.[0-9]+"
+tag_pattern = "v[0-9]+\\.[0-9]+\\.[0-9]+(-pre\\.[0-9]+)?"
 # filter out the commits that are not matched by commit parsers
 filter_commits = false
 # sort the tags topologically
