@@ -31,7 +31,7 @@ runs:
         GITHUB_REF: ${{ github.ref || '' }}
         ALLOW_NON_MAIN_RELEASE: ${{ inputs.allow_non_main_release }}
       run: |
-        ${{ github.action_path }}/scripts/detect-version-change.sh
+        ${{ github.action_path }}/scripts/detect-version-change.py
 
     - name: Read CLIFF_VERSION
       shell: bash
@@ -79,5 +79,6 @@ runs:
         RELEASE_PUBLISH_TOKEN: ${{ inputs.token || '' }}
         GITEA_TOKEN: ${{ inputs.token || '' }}
         GITEA_API_URL: ${{ github.server_url }}
+        VERSION_AFTER: ${{ steps.detect.outputs.version_after }}
       run: |
         ${{ github.action_path }}/scripts/release-from-version.sh

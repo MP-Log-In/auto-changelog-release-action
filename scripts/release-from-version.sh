@@ -52,18 +52,17 @@ EOF
   done
 }
 
-VERSION_FILE="VERSION"
 CHANGELOG_FILE="CHANGELOG.md"
 CLIFF_CONFIG="cliff.toml"
 RELEASE_BODY_TMP="$(mktemp)"
 GIT_BRANCH="${GITHUB_REF##refs/heads/}"
 
 # === Step 1: Read version ===
-if [[ ! -f "$VERSION_FILE" ]]; then
+if [[ -z "${VERSION_AFTER:-}" ]]; then
   echo "❌ VERSION file not found"
   exit 1
 fi
-VERSION="$(<"$VERSION_FILE")"
+VERSION="${VERSION_AFTER}"
 echo "📦 Version: $VERSION"
 
 # === Step 2: Generate changelog for release ===
