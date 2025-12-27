@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚜 Refactor
+
+- *(action)* Switch version detection to python script output - ([b99055c](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/b99055c5566d13a3619cd4f9b548b117adb4a2f9))
+
 ## [1.4.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.4.0..v1.4.1) - 2025-12-26
 
 ### 🐛 Bug Fixes
