@@ -18,6 +18,17 @@ inputs:
     description: "Allow publishing releases from branches other than 'main'."
     required: false
     default: "false"
+  version_file:
+    description: "File that contains the project version (Single Source of Truth)."
+    required: false
+    default: "VERSION"
+
+  version_regex:
+    description: >
+      Regular expression used to extract the version from version_file.
+      If empty, a sensible default is chosen based on the file name.
+    required: false
+    default: ""
 
 runs:
   using: "composite"
@@ -30,6 +41,8 @@ runs:
         GITHUB_SHA: ${{ github.sha || '' }}
         GITHUB_REF: ${{ github.ref || '' }}
         ALLOW_NON_MAIN_RELEASE: ${{ inputs.allow_non_main_release }}
+        VERSION_FILE: ${{ inputs.version_file }}
+        VERSION_REGEX: ${{ inputs.version_regex }}
       run: |
         ${{ github.action_path }}/scripts/detect-version-change.py
 
