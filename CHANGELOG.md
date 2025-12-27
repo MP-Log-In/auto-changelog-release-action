@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [1.5.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.4.1..v1.5.0) - 2025-12-27
 
 ### 🚀 Features
 
