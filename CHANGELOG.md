@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### 🚀 Features
+
+- *(action)* Add inputs for configurable version file and regex - ([4805b31](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/4805b31b56da743130afc7744efb2fc97a805c57))
+
 ### 🚜 Refactor
 
 - *(action)* Switch version detection to python script output - ([b99055c](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/b99055c5566d13a3619cd4f9b548b117adb4a2f9))
