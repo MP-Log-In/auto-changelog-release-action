@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- *(changelog)* Include prerelease commits in final release notes - ([e187258](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/e187258ae5e5655a7c529a12fdbca8dba4589f37))
+
 ## [1.5.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.5.0..v1.5.1) - 2025-12-29
 
 ### 🐛 Bug Fixes
