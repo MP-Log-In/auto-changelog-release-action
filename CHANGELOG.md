@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🎨 Styling
+
+- *(cliff)* Adjust prerelease link formatting in template - ([ca13ec5](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/ca13ec5fa9c89b89854b7ebef978b3da4492e3f0))
+
 ## [1.6.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.5.1..v1.6.0) - 2026-01-01
 
 ### 🚀 Features
