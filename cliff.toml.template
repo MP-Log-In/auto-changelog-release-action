@@ -55,7 +55,7 @@ body = """
                 {% if child.breaking %}[**breaking**] {% endif %}\
                 {{ child.message | upper_first }} - \
                 {% if commit.extra and commit.extra.from_prerelease %}\
-                    ([from {{ commit.extra.from_prerelease }}]({{ self::remote_url() }}/releases/tag/{{ commit.extra.from_prerelease }}))\
+                    (from [{{ commit.extra.from_prerelease }}]({{ self::remote_url() }}/releases/tag/{{ commit.extra.from_prerelease }}))\
                     {{ " " | safe }}- \
                 {% endif %}\
                 ([{{ child.id | truncate(length=7, end="") }}]({{ self::remote_url() }}/commit/{{ child.id }}))\
@@ -66,7 +66,7 @@ body = """
     {% if commit.breaking %}[**breaking**] {% endif %}\
     {{ commit.message | upper_first }} - \
     {% if commit.extra and commit.extra.from_prerelease %}\
-        ([from {{ commit.extra.from_prerelease }}]({{ self::remote_url() }}/releases/tag/{{ commit.extra.from_prerelease }}))\
+        (from [{{ commit.extra.from_prerelease }}]({{ self::remote_url() }}/releases/tag/{{ commit.extra.from_prerelease }}))\
         {{ " " | safe }}- \
     {% endif %}\
     ([{{ commit.id | truncate(length=7, end="") }}]({{ self::remote_url() }}/commit/{{ commit.id }}))\
