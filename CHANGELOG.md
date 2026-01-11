@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- *(action)* Add commit-based semantic version bumping - ([64c6a95](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/64c6a95b55032d1b7cae9f9c4befa66b8834b1e6))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(scripts)* Remove obsolete bash version change detector script - ([fdfe1a9](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/fdfe1a992cf7bfe7605cc5c74068eafb0e1f7a17))
+
 ## [1.6.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.6.0..v1.6.1) - 2026-01-01
 
 ### 🎨 Styling
