@@ -10,10 +10,12 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes
 
+- *(action)* Call renamed bump version script - ([b904864](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/b904864bc149944692dbdae3ff73d3efed3fefb5))
 - *(scripts)* Read bump config from env instead of cli args - ([ea28e12](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/ea28e1258c4ac61fe4a0561f2de7489ce1571719))
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(scripts)* Make bump version script executable - ([eb53c39](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/eb53c390a875f1f98a0ebd7623a95bbdcdeaec75))
 - *(scripts)* Remove obsolete bash version change detector script - ([fdfe1a9](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/fdfe1a992cf7bfe7605cc5c74068eafb0e1f7a17))
 
 ## [1.6.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.6.0..v1.6.1) - 2026-01-01
