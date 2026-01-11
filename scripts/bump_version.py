@@ -139,27 +139,27 @@ def replace_version(text: str, regex: str, new_version: str) -> str:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--range", required=True)
-    ap.add_argument("--version-file", required=True)
-    ap.add_argument("--version-regex", required=True)
-    ap.add_argument("--major-patterns")
-    ap.add_argument("--minor-patterns")
-    ap.add_argument("--patch-patterns")
-    args = ap.parse_args()
+    version_file = os.environ["VERSION_FILE"]
+    version_regex = os.environ["VERSION_REGEX"]
 
+    major_raw = os.environ.get("MAJOR_PATTERNS", "")
+    minor_raw = os.environ.get("MINOR_PATTERNS", "")
+    patch_raw = os.environ.get("PATCH_PATTERNS", "")
+
+    revision_range = os.environ["RANGE"]
+    
     github_output = os.environ.get("GITHUB_OUTPUT", "")
     github_env = os.environ.get("GITHUB_ENV", "")
 
-    messages = get_commit_messages(args.range)
+    messages = get_commit_messages(revision_range)
     if not messages:
         append_kv(github_output, "version_bumped", "false")
         append_kv(github_env, "VERSION_BUMPED", "false")
         return
 
-    major_p = parse_patterns(args.major_patterns)
-    minor_p = parse_patterns(args.minor_patterns)
-    patch_p = parse_patterns(args.patch_patterns)
+    major_p = parse_patterns(major_raw)
+    minor_p = parse_patterns(minor_raw)
+    patch_p = parse_patterns(patch_raw)
 
     bump: str | None = None
     if major_p and any_match(messages, major_p):
@@ -174,10 +174,10 @@ def main() -> None:
         append_kv(github_env, "VERSION_BUMPED", "false")
         return
 
-    path = Path(args.version_file)
+    path = Path(version_file)
     content = path.read_text(encoding="utf-8")
 
-    m = re.search(args.version_regex, content, flags=re.MULTILINE)
+    m = re.search(version_regex, content, flags=re.MULTILINE)
     if not m:
         raise RuntimeError("Version regex did not match")
 
@@ -189,7 +189,7 @@ def main() -> None:
         append_kv(github_env, "VERSION_BUMPED", "false")
         return
 
-    new_content = replace_version(content, args.version_regex, new_version)
+    new_content = replace_version(content, version_regex, new_version)
     path.write_text(new_content, encoding="utf-8")
 
     run_git(["add", str(path)])

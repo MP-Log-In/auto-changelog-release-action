@@ -65,14 +65,17 @@ runs:
       env:
         GITHUB_OUTPUT: ${{ github.output }}
         GITHUB_ENV: ${{ github.env }}
+
+        VERSION_FILE: ${{ inputs.version_file }}
+        VERSION_REGEX: ${{ inputs.version_regex }}
+
+        MAJOR_PATTERNS: ${{ inputs.major_patterns }}
+        MINOR_PATTERNS: ${{ inputs.minor_patterns }}
+        PATCH_PATTERNS: ${{ inputs.patch_patterns }}
+
+        RANGE: ${{ github.event.before }}..${{ github.sha }}
       run: |
-        ${{ github.action_path }}/scripts/bump-version.py \
-          --range "${{ github.event.before }}..${{ github.sha }}" \
-          --version-file "${{ inputs.version_file }}" \
-          --version-regex "${{ inputs.version_regex }}" \
-          --major-patterns "${{ inputs.major_patterns }}" \
-          --minor-patterns "${{ inputs.minor_patterns }}" \
-          --patch-patterns "${{ inputs.patch_patterns }}"
+        ${{ github.action_path }}/scripts/bump-version.py
 
     - name: Detect version change
       shell: bash
