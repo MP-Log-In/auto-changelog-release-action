@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - *(action)* Add commit-based semantic version bumping - ([64c6a95](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/64c6a95b55032d1b7cae9f9c4befa66b8834b1e6))
 
+### 🐛 Bug Fixes
+
+- *(scripts)* Read bump config from env instead of cli args - ([ea28e12](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/ea28e1258c4ac61fe4a0561f2de7489ce1571719))
+
 ### ⚙️ Miscellaneous Tasks
 
 - *(scripts)* Remove obsolete bash version change detector script - ([fdfe1a9](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/fdfe1a992cf7bfe7605cc5c74068eafb0e1f7a17))
