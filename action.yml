@@ -75,7 +75,7 @@ runs:
 
         RANGE: ${{ github.event.before }}..${{ github.sha }}
       run: |
-        ${{ github.action_path }}/scripts/bump-version.py
+        ${{ github.action_path }}/scripts/bump_version.py
 
     - name: Detect version change
       shell: bash
