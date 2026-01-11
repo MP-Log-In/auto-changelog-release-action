@@ -74,6 +74,8 @@ runs:
         PATCH_PATTERNS: ${{ inputs.patch_patterns }}
 
         RANGE: ${{ github.event.before }}..${{ github.sha }}
+
+        ALLOW_NON_MAIN_RELEASE: ${{ inputs.allow_non_main_release }}
       run: |
         ${{ github.action_path }}/scripts/bump_version.py
 

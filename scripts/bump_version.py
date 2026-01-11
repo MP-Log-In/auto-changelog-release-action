@@ -148,8 +148,17 @@ def main() -> None:
 
     revision_range = os.environ["RANGE"]
     
+    allow_non_main_release=os.environ.get("ALLOW_NON_MAIN_RELEASE", "false").lower() == "true"
+    
     github_output = os.environ.get("GITHUB_OUTPUT", "")
     github_env = os.environ.get("GITHUB_ENV", "")
+    
+    # Check branch condition (keep behavior compatible with your Bash snippet).
+    if (not allow_non_main_release) and (os.environ.get("GITHUB_REF", "") != "refs/heads/main"):
+        print("🚫 Not on 'main' branch and non-main releases are disabled – skipping version check.")
+        append_kv(github_output, "version_bumped", "false")
+        append_kv(github_env, "VERSION_BUMPED", "false")
+        return
 
     messages = get_commit_messages(revision_range)
     if not messages:
