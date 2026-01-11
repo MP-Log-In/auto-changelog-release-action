@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes
 
+- *(action)* Propagate bumped version to release step - ([f806a3e](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/f806a3e3d2faba3a12550fb8bd9a2a67c364bd1d))
 - *(action)* Call renamed bump version script - ([b904864](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/b904864bc149944692dbdae3ff73d3efed3fefb5))
 - *(scripts)* Read bump config from env instead of cli args - ([ea28e12](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/ea28e1258c4ac61fe4a0561f2de7489ce1571719))
 
