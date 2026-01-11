@@ -201,6 +201,9 @@ def main() -> None:
 
     append_kv(github_output, "version_bumped", "true")
     append_kv(github_env, "VERSION_BUMPED", "true")
+    
+    append_kv(github_output, "version_after", new_version)
+    append_kv(github_env, "VERSION_AFTER", new_version)
 
     print(f"Version bumped: {old_version} → {new_version}")
 

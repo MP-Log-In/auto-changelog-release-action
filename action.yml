@@ -92,6 +92,8 @@ runs:
           echo "Version was bumped in previous step."
           echo "version_changed=true" >> "$GITHUB_OUTPUT"
           echo "VERSION_CHANGED=true" >> "$GITHUB_ENV"
+          echo "version_after=${{ steps.bump.outputs.version_after }}" >> "$GITHUB_OUTPUT"
+          echo "VERSION_AFTER=${{ steps.bump.outputs.version_after }}" >> "$GITHUB_ENV"
         else
           ${{ github.action_path }}/scripts/detect-version-change.py
         fi
