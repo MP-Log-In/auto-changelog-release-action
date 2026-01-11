@@ -30,9 +30,50 @@ inputs:
     required: false
     default: ""
 
+  major_patterns:
+    description: >
+      New-line-separated list of regex patterns to identify major version bumps from commit messages.
+      If empty, no major version bumps will be detected.
+    required: false
+    default: ""
+  minor_patterns:
+    description: >
+      New-line-separated list of regex patterns to identify minor version bumps from commit messages.
+      If empty, no minor version bumps will be detected.
+    required: false
+    default: ""
+  patch_patterns:
+    description: >
+      New-line-separated list of regex patterns to identify patch version bumps from commit messages.
+      If empty, no patch version bumps will be detected.
+    required: false
+    default: ""
+
 runs:
   using: "composite"
   steps:
+    - name: Set up git
+      shell: bash
+      run: |
+        ${{ github.action_path }}/scripts/setup-git.sh \
+          "${{ inputs.author_name }}" \
+          "${{ inputs.author_email }}"
+
+    - name: Bump version from commits
+      id: bump
+      shell: bash
+      env:
+        GITHUB_OUTPUT: ${{ github.output }}
+        GITHUB_ENV: ${{ github.env }}
+      run: |
+        ${{ github.action_path }}/scripts/bump-version.py \
+          --range "${{ github.event.before }}..${{ github.sha }}" \
+          --version-file "${{ inputs.version_file }}" \
+          --version-regex "${{ inputs.version_regex }}" \
+          --major-patterns "${{ inputs.major_patterns }}" \
+          --minor-patterns "${{ inputs.minor_patterns }}" \
+          --patch-patterns "${{ inputs.patch_patterns }}"
+
     - name: Detect version change
       shell: bash
       id: detect
@@ -44,7 +85,13 @@ runs:
         VERSION_FILE: ${{ inputs.version_file }}
         VERSION_REGEX: ${{ inputs.version_regex }}
       run: |
-        ${{ github.action_path }}/scripts/detect-version-change.py
+        if [ "${{ steps.bump.outputs.version_bumped }}" = "true" ]; then
+          echo "Version was bumped in previous step."
+          echo "version_changed=true" >> "$GITHUB_OUTPUT"
+          echo "VERSION_CHANGED=true" >> "$GITHUB_ENV"
+        else
+          ${{ github.action_path }}/scripts/detect-version-change.py
+        fi
 
     - name: Read CLIFF_VERSION
       shell: bash
@@ -68,13 +115,6 @@ runs:
       shell: bash
       run: |
         ${{ github.action_path }}/scripts/install-python.sh
-
-    - name: Set up git
-      shell: bash
-      run: |
-        ${{ github.action_path }}/scripts/setup-git.sh \
-          "${{ inputs.author_name }}" \
-          "${{ inputs.author_email }}"
 
     - name: Generate and commit changelog (unreleased)
       if: steps.detect.outputs.version_changed == 'false'
