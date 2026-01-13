@@ -28,7 +28,7 @@ inputs:
       Regular expression used to extract the version from version_file.
       If empty, a sensible default is chosen based on the file name.
     required: false
-    default: ""
+    default: "^(.*)$"
 
   major_patterns:
     description: >
