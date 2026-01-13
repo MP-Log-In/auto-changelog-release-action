@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.7.0..v1.7.1) - 2026-01-13
+
+### 🐛 Bug Fixes
+
+- *(action)* Set default version regex to match entire file content - ([f67007a](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/f67007a61ce9f7976daaf7f76654ecab01c63b76))
+
 ## [1.7.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.6.1..v1.7.0) - 2026-01-11
 
 ### 🚀 Features
