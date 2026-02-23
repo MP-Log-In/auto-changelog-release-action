@@ -119,9 +119,9 @@ if [[ -z "${RELEASE_PUBLISH_TOKEN:-}" ]]; then
   echo
 fi
 
-# Check if version has a suffix like -text.text indicating a pre-release
-if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-[A-Za-z0-9]+\.[A-Za-z0-9]+$ ]]; then
-  echo "ℹ️  Detected pre-release style suffix (-text.text)."
+# Check if version has any suffix after '-' indicating a pre-release
+if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-.+$ ]]; then
+  echo "ℹ️  Detected pre-release suffix (-...)."
   create_release "$OWNER" "$REPO" "$TOKEN" "$VERSION" "$RELEASE_BODY_TMP" true
 else
   create_release "$OWNER" "$REPO" "$TOKEN" "$VERSION" "$RELEASE_BODY_TMP"
