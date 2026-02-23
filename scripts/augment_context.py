@@ -5,7 +5,7 @@ import subprocess
 import sys
 import re
 
-VERSION_RE = re.compile(r"^(v\d+\.\d+\.\d+)(-pre\.\d+)?$")
+VERSION_RE = re.compile(r"^(v\d+\.\d+\.\d+)(-[A-Za-z0-9]+\.[A-Za-z0-9]+)?$")
 
 def extract_type(raw_message: str) -> str | None:
     m = re.match(r"^(\w+)(?:\([^)]+\))?:", raw_message.strip())
