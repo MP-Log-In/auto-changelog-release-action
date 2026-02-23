@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.7.1..v1.8.0) - 2026-02-23
+
+### 🐛 Bug Fixes
+
+- *(scripts)* Refine prerelease detection regex in release script - ([8e5e4a6](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/8e5e4a69de8fde1ca1786e4606b6959d3b2b92e4))
+- *(scripts)* Extend version regex to support prerelease tags - ([aeccbc0](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/aeccbc056d64e46f551e3cbe3f85c7296b60744d))
+
 ## [1.7.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.7.0..v1.7.1) - 2026-01-13
 
 ### 🐛 Bug Fixes
