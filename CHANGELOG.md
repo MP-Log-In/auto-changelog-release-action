@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.8.0..v1.8.1) - 2026-02-23
+
+### 🐛 Bug Fixes
+
+- *(scripts)* Broaden prerelease version suffix detection - ([c38b60f](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/c38b60ff3233fa4f6c610d91f9985e565e37babc))
+
 ## [1.8.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.7.1..v1.8.0) - 2026-02-23
 
 ### 🐛 Bug Fixes
