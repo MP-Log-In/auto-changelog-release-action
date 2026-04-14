@@ -30,6 +30,13 @@ inputs:
     required: false
     default: "^(.*)$"
 
+  github_sha_override:
+    description: >
+      Override for the GitHub SHA used to determine the commit range for version bump detection.
+      Useful for testing or non-standard workflows. If empty, defaults to ${{ github.sha }}.
+    required: false
+    default: ""
+
   major_patterns:
     description: >
       New-line-separated list of regex patterns to identify major version bumps from commit messages.
@@ -73,7 +80,7 @@ runs:
         MINOR_PATTERNS: ${{ inputs.minor_patterns }}
         PATCH_PATTERNS: ${{ inputs.patch_patterns }}
 
-        RANGE: ${{ github.event.before }}..${{ github.sha }}
+        RANGE: ${{ github.event.before }}..${{ inputs.github_sha_override || github.sha || '' }}
 
         ALLOW_NON_MAIN_RELEASE: ${{ inputs.allow_non_main_release }}
       run: |
@@ -84,7 +91,7 @@ runs:
       id: detect
       env:
         GITHUB_EVENT_BEFORE: ${{ github.event.before || '' }}
-        GITHUB_SHA: ${{ github.sha || '' }}
+        GITHUB_SHA: ${{ inputs.github_sha_override || github.sha || '' }}
         GITHUB_REF: ${{ github.ref || '' }}
         ALLOW_NON_MAIN_RELEASE: ${{ inputs.allow_non_main_release }}
         VERSION_FILE: ${{ inputs.version_file }}
