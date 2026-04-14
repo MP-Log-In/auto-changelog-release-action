@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+PRE_RELEASE_LABELS=(pre alpha beta)
+
 create_release() {
   local -r owner="$1" repo="$2" token="$3" version="$4" body_file="$5" prerelease="${6:-false}"
   local -i max_attempts=3 delay=5 attempt
@@ -50,6 +52,24 @@ EOF
     }
     sleep $((delay * attempt)) # Back-off: 5 s, 10 s, 15 s …
   done
+}
+
+is_pre_release_version() {
+  local -r version="$1"
+  local label
+
+  if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+-([A-Za-z]+)(\..+)?$ ]]; then
+    return 1
+  fi
+
+  label="${BASH_REMATCH[1]}"
+  for allowed_label in "${PRE_RELEASE_LABELS[@]}"; do
+    if [[ "$label" == "$allowed_label" ]]; then
+      return 0
+    fi
+  done
+
+  return 1
 }
 
 CHANGELOG_FILE="CHANGELOG.md"
@@ -119,9 +139,9 @@ if [[ -z "${RELEASE_PUBLISH_TOKEN:-}" ]]; then
   echo
 fi
 
-# Check if version has any suffix after '-' indicating a pre-release
-if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-.+$ ]]; then
-  echo "ℹ️  Detected pre-release suffix (-...)."
+# Check if version has a configured pre-release label.
+if is_pre_release_version "$VERSION"; then
+  echo "ℹ️  Detected configured pre-release label."
   create_release "$OWNER" "$REPO" "$TOKEN" "$VERSION" "$RELEASE_BODY_TMP" true
 else
   create_release "$OWNER" "$REPO" "$TOKEN" "$VERSION" "$RELEASE_BODY_TMP"

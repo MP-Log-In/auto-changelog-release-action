@@ -5,7 +5,8 @@ import subprocess
 import sys
 import re
 
-VERSION_RE = re.compile(r"^(v\d+\.\d+\.\d+)(?:-(.+))?$")
+PRE_RELEASE_POSTFIXES = {"pre", "alpha", "beta"}
+VERSION_RE = re.compile(r"^(v\d+\.\d+\.\d+)(?:-(?P<label>[A-Za-z]+)(?:\.(?P<suffix>.+))?)?$")
 
 def extract_type(raw_message: str) -> str | None:
     m = re.match(r"^(\w+)(?:\([^)]+\))?:", raw_message.strip())
@@ -25,7 +26,19 @@ def parse_version_parts(version: str | None):
     match = VERSION_RE.match(version.strip())
     if not match:
         return None
-    return match.group(1), match.group(2)
+
+    label = match.group("label")
+    if label and label not in PRE_RELEASE_POSTFIXES:
+        return match.group(1), None
+
+    suffix = None
+    if label:
+        suffix = label
+        suffix_tail = match.group("suffix")
+        if suffix_tail:
+            suffix = f"{suffix}.{suffix_tail}"
+
+    return match.group(1), suffix
 
 def load_context(path=None):
     if path:

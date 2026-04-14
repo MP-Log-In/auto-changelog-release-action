@@ -74,15 +74,15 @@ def any_match(messages: Iterable[str], patterns: Iterable[re.Pattern]) -> bool:
 # Version handling
 # ---------------------------------------------------------------------------
 
+PRE_RELEASE_POSTFIXES = {"pre", "alpha", "beta"}
+
 VERSION_RE = re.compile(
     r"""
     ^
     (?P<core>\d+\.\d+\.\d+)
     (?:
         -
-        (?P<label>[A-Za-z]+)
-        \.
-        (?P<num>\d+)
+        (?P<suffix>(?P<label>[A-Za-z]+)(?:\.(?P<num>\d+))?)
     )?
     $
     """,
@@ -101,22 +101,27 @@ def bump_version(version: str, bump: str) -> str:
         raise ValueError(f"Unsupported version format: {version}")
 
     core = m.group("core")
+    suffix = m.group("suffix")
     label = m.group("label")
     num = m.group("num")
 
     major, minor, patch = map(int, core.split("."))
 
-    if label and num:
+    if label and num and label in PRE_RELEASE_POSTFIXES:
         return f"{core}-{label}.{int(num) + 1}"
 
     if bump == "major":
-        return f"{major + 1}.0.0"
-    if bump == "minor":
-        return f"{major}.{minor + 1}.0"
-    if bump == "patch":
-        return f"{major}.{minor}.{patch + 1}"
+        bumped_core = f"{major + 1}.0.0"
+    elif bump == "minor":
+        bumped_core = f"{major}.{minor + 1}.0"
+    elif bump == "patch":
+        bumped_core = f"{major}.{minor}.{patch + 1}"
+    else:
+        raise ValueError(bump)
 
-    raise ValueError(bump)
+    if suffix:
+        return f"{bumped_core}-{suffix}"
+    return bumped_core
 
 
 def replace_version(text: str, regex: str, new_version: str) -> str:
