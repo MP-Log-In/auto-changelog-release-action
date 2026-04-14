@@ -4,11 +4,13 @@
 set -euo pipefail
 
 if command -v python3 >/dev/null 2>&1; then
-    echo "ℹ️ Python $(python3 --version) is already installed"
+    PYTHON_VERSION=$(python3 --version 2>&1)
+    echo "✅ Python ${PYTHON_VERSION} is already installed"
     exit 0
 fi
 
-apt update
-apt install -y python3
+apt update -qq
+apt install -yqq python3
 
-echo "✅ Python $(python3 --version) installed"
+PYTHON_VERSION=$(python3 --version 2>&1)
+echo "✅ Python ${PYTHON_VERSION} installed"
