@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.8.1..v1.8.2) - 2026-04-14
+
+### 🐛 Bug Fixes
+
+- *(scripts)* Restrict prerelease handling to configured labels - ([f1ed576](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/f1ed576fba4729cc0fad50d50860053e7705fbd3))
+
+### 🚜 Refactor
+
+- *(scripts)* Improve release script robustness and consistency - ([6462f63](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/6462f638db6ef821dd212f98bf8cb34488830301))
+- *(scripts)* Improve bash robustness and version logging - ([fcf6a04](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/fcf6a0492a4dac3dfdfd0390d4457016fc4689a5))
+
 ## [1.8.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.8.0..v1.8.1) - 2026-02-23
 
 ### 🐛 Bug Fixes
