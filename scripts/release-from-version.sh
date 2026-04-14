@@ -3,6 +3,11 @@ set -euo pipefail
 
 PRE_RELEASE_LABELS=(pre alpha beta)
 
+GITHUB_ACTION_PATH="${GITHUB_ACTION_PATH:-}"
+GITHUB_API_URL="${GITHUB_API_URL:-}"
+GITHUB_REF="${GITHUB_REF:-}"
+GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-}"
+
 create_release() {
   local -r owner="$1" repo="$2" token="$3" version="$4" body_file="$5" prerelease="${6:-false}"
   local -i max_attempts=3 delay=5 attempt
@@ -10,43 +15,43 @@ create_release() {
 
   # Read release body for JSON payload
   local body_json
-  body_json=$(tail -n +2 "$body_file" | jq -Rs .)
+  body_json=$(tail -n +2 "${body_file}" | jq -Rs .)
 
   for ((attempt = 1; attempt <= max_attempts; attempt++)); do
-    echo "🚀 Try $attempt/$max_attempts: creating release v$version …"
+    echo "🚀 Try ${attempt}/${max_attempts}: creating release v${version} …"
 
     http=$(
       curl -sS \
-        -H "Authorization: token $token" \
+        -H "Authorization: token ${token}" \
         -H "Content-Type: application/json" \
         -o resp.json -w '%{http_code}' \
-        -X POST "$GITHUB_API_URL/repos/$owner/$repo/releases" \
+        -X POST "${GITHUB_API_URL}/repos/${owner}/${repo}/releases" \
         -d @- <<EOF
 {
-  "tag_name": "v$version",
+  "tag_name": "v${version}",
   "target_commitish": "main",
-  "name": "Release v$version",
-  "body": $body_json,
+  "name": "Release v${version}",
+  "body": ${body_json},
   "draft": false,
-  "prerelease": $prerelease
+  "prerelease": ${prerelease}
 }
 EOF
     )
 
-    status=$http
-    if [[ $status == 201 ]]; then
+    status="${http}"
+    if [[ ${status} == 201 ]]; then
       echo "✅ Release created (201)."
       rm -f resp.json
       return 0
-    elif [[ $status == 409 ]]; then
+    elif [[ ${status} == 409 ]]; then
       echo "🔁 Release already exists (409) – skipping."
       rm -f resp.json
       return 0
     fi
 
-    echo "⚠️  Release attempt failed (HTTP $status)"
+    echo "⚠️  Release attempt failed (HTTP ${status})"
     cat resp.json
-    [[ $attempt -lt $max_attempts ]] || {
+    [[ ${attempt} -lt ${max_attempts} ]] || {
       echo "❌ Giving up."
       return 1
     }
@@ -58,18 +63,20 @@ is_pre_release_version() {
   local -r version="$1"
   local label
 
-  if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+-([A-Za-z]+)(\..+)?$ ]]; then
-    return 1
+  if [[ ! "${version}" =~ ^[0-9]+\.[0-9]+\.[0-9]+-([A-Za-z]+)(\..+)?$ ]]; then
+    printf '%s\n' false
+    return 0
   fi
 
   label="${BASH_REMATCH[1]}"
   for allowed_label in "${PRE_RELEASE_LABELS[@]}"; do
-    if [[ "$label" == "$allowed_label" ]]; then
+    if [[ "${label}" == "${allowed_label}" ]]; then
+      printf '%s\n' true
       return 0
     fi
   done
 
-  return 1
+  printf '%s\n' false
 }
 
 CHANGELOG_FILE="CHANGELOG.md"
@@ -83,17 +90,17 @@ if [[ -z "${VERSION_AFTER:-}" ]]; then
   exit 1
 fi
 VERSION="${VERSION_AFTER}"
-echo "📦 Version: $VERSION"
+echo "📦 Version: ${VERSION}"
 
 # === Step 2: Generate changelog for release ===
-echo "📄 Generating changelog for tag v$VERSION"
-git-cliff -c "$CLIFF_CONFIG" -t "v$VERSION" --context |
+echo "📄 Generating changelog for tag v${VERSION}"
+git-cliff -c "${CLIFF_CONFIG}" -t "v${VERSION}" --context |
   "${GITHUB_ACTION_PATH}/scripts/augment_context.py" |
-  git-cliff -c "$CLIFF_CONFIG" -t "v$VERSION" --from-context - -o "$CHANGELOG_FILE"
+  git-cliff -c "${CLIFF_CONFIG}" -t "v${VERSION}" --from-context - -o "${CHANGELOG_FILE}"
 
-ESCAPED_VERSION="$(echo "$VERSION" | sed 's/\./\\./g')"
+ESCAPED_VERSION="${VERSION//./\\.}"
 
-awk -v ver="$ESCAPED_VERSION" '
+awk -v ver="${ESCAPED_VERSION}" '
   $0 ~ "^## \\[" ver "\\]" {
     print_flag=1
     line=$0
@@ -104,33 +111,34 @@ awk -v ver="$ESCAPED_VERSION" '
   }
   $0 ~ "^## \\[" && $0 !~ "^## \\[" ver "\\]" { print_flag=0 }
   print_flag
-' "$CHANGELOG_FILE" >"$RELEASE_BODY_TMP"
+' "${CHANGELOG_FILE}" >"${RELEASE_BODY_TMP}"
 
 # === Step 3: Commit changelog ===
-git add "$CHANGELOG_FILE"
+git add "${CHANGELOG_FILE}"
 if git diff --cached --quiet; then
   echo "✅ No changes to commit"
 else
   echo "📝 Committing updated changelog"
-  git commit -m "chore(changelog): update changelog for v$VERSION"
-  git push origin "$GIT_BRANCH"
+  git commit -m "chore(changelog): update changelog for v${VERSION}"
+  git push origin "${GIT_BRANCH}"
 fi
 
 # === Step 4: Create tag if necessary ===
-if git rev-parse "v$VERSION" >/dev/null 2>&1; then
-  echo "🔁 Tag v$VERSION already exists, skipping."
+if git rev-parse "v${VERSION}" >/dev/null 2>&1; then
+  echo "🔁 Tag v${VERSION} already exists, skipping."
 else
-  echo "🏷️  Creating annotated tag v$VERSION"
-  export GIT_AUTHOR_DATE="@$(date +%s)"
-  export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
-  git tag -a "v$VERSION" -F "$RELEASE_BODY_TMP" --cleanup=verbatim
-  git push origin "v$VERSION"
+  echo "🏷️  Creating annotated tag v${VERSION}"
+  GIT_AUTHOR_DATE="@$(date +%s)"
+  export GIT_AUTHOR_DATE
+  export GIT_COMMITTER_DATE="${GIT_AUTHOR_DATE}"
+  git tag -a "v${VERSION}" -F "${RELEASE_BODY_TMP}" --cleanup=verbatim
+  git push origin "v${VERSION}"
 fi
 
 # === Step 5: Create release (with retry) ===
 OWNER="${GITHUB_REPOSITORY%/*}"
 REPO="${GITHUB_REPOSITORY#*/}"
-TOKEN="${RELEASE_PUBLISH_TOKEN:-$ACTIONS_RUNTIME_TOKEN}"
+TOKEN="${RELEASE_PUBLISH_TOKEN:-${ACTIONS_RUNTIME_TOKEN}}"
 
 if [[ -z "${RELEASE_PUBLISH_TOKEN:-}" ]]; then
   echo "::warning title=Limited Release Propagation::"
@@ -140,11 +148,12 @@ if [[ -z "${RELEASE_PUBLISH_TOKEN:-}" ]]; then
 fi
 
 # Check if version has a configured pre-release label.
-if is_pre_release_version "$VERSION"; then
+IS_PRE_RELEASE="$(is_pre_release_version "${VERSION}")"
+if [[ "${IS_PRE_RELEASE}" == "true" ]]; then
   echo "ℹ️  Detected configured pre-release label."
-  create_release "$OWNER" "$REPO" "$TOKEN" "$VERSION" "$RELEASE_BODY_TMP" true
+  create_release "${OWNER}" "${REPO}" "${TOKEN}" "${VERSION}" "${RELEASE_BODY_TMP}" true
 else
-  create_release "$OWNER" "$REPO" "$TOKEN" "$VERSION" "$RELEASE_BODY_TMP"
+  create_release "${OWNER}" "${REPO}" "${TOKEN}" "${VERSION}" "${RELEASE_BODY_TMP}"
 fi
 
 echo "🎉 Workflow finished successfully."
