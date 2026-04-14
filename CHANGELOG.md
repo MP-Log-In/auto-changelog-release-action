@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.8.2..v1.9.0) - 2026-04-14
+
+### 🚀 Features
+
+- *(action)* Add github sha override input for commit range detection - ([4189779](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/41897794db091ca7a7690211448632d2fc1dcab6))
+
 ## [1.8.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.8.1..v1.8.2) - 2026-04-14
 
 ### 🐛 Bug Fixes
