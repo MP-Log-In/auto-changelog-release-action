@@ -3,9 +3,9 @@
 Semantic version bump script based on commit message regex matching.
 
 - Extracts version via regex from a version file
-- Supports semver with pre-releases: X.Y.Z-pre.N
-- If a pre-release exists, ONLY its counter is incremented
-- Otherwise, major/minor/patch bump is applied
+- Supports semver plus dotted suffixes: X.Y.Z-label.extra
+- If a configured pre-release exists (for example X.Y.Z-pre.N), ONLY its counter is incremented
+- Otherwise, major/minor/patch bump is applied and any suffix is preserved
 - Replaces exactly the regex match (not a blind string replace)
 - Exposes whether a bump happened via GITHUB_OUTPUT / GITHUB_ENV
 """
@@ -23,6 +23,7 @@ from typing import Iterable, List
 # ---------------------------------------------------------------------------
 # Git helpers
 # ---------------------------------------------------------------------------
+
 
 def run_git(args: List[str]) -> str:
     result = subprocess.run(
@@ -44,6 +45,7 @@ def get_commit_messages(revision_range: str) -> List[str]:
 # Output helpers (Actions-compatible)
 # ---------------------------------------------------------------------------
 
+
 def append_kv(path: str, key: str, value: str) -> None:
     if not path:
         return
@@ -54,6 +56,7 @@ def append_kv(path: str, key: str, value: str) -> None:
 # ---------------------------------------------------------------------------
 # Pattern handling
 # ---------------------------------------------------------------------------
+
 
 def parse_patterns(raw: str | None) -> List[re.Pattern]:
     if not raw:
@@ -82,7 +85,7 @@ VERSION_RE = re.compile(
     (?P<core>\d+\.\d+\.\d+)
     (?:
         -
-        (?P<suffix>(?P<label>[A-Za-z]+)(?:\.(?P<num>\d+))?)
+        (?P<suffix>(?P<label>[A-Za-z]+)(?:\.(?P<tail>.+))?)
     )?
     $
     """,
@@ -93,7 +96,7 @@ VERSION_RE = re.compile(
 def bump_version(version: str, bump: str) -> str:
     """
     Rules:
-    - If a pre-release exists (X.Y.Z-label.N), ONLY increment N
+    - If a configured pre-release exists (X.Y.Z-label.N), ONLY increment N
     - Otherwise apply semantic bump to core version
     """
     m = VERSION_RE.match(version)
@@ -103,12 +106,12 @@ def bump_version(version: str, bump: str) -> str:
     core = m.group("core")
     suffix = m.group("suffix")
     label = m.group("label")
-    num = m.group("num")
+    tail = m.group("tail")
 
     major, minor, patch = map(int, core.split("."))
 
-    if label and num and label in PRE_RELEASE_POSTFIXES:
-        return f"{core}-{label}.{int(num) + 1}"
+    if label and label in PRE_RELEASE_POSTFIXES and tail and tail.isdigit():
+        return f"{core}-{label}.{int(tail) + 1}"
 
     if bump == "major":
         bumped_core = f"{major + 1}.0.0"
@@ -143,6 +146,7 @@ def replace_version(text: str, regex: str, new_version: str) -> str:
 # Main
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     version_file = os.environ["VERSION_FILE"]
     version_regex = os.environ["VERSION_REGEX"]
@@ -152,15 +156,21 @@ def main() -> None:
     patch_raw = os.environ.get("PATCH_PATTERNS", "")
 
     revision_range = os.environ["RANGE"]
-    
-    allow_non_main_release=os.environ.get("ALLOW_NON_MAIN_RELEASE", "false").lower() == "true"
-    
+
+    allow_non_main_release = (
+        os.environ.get("ALLOW_NON_MAIN_RELEASE", "false").lower() == "true"
+    )
+
     github_output = os.environ.get("GITHUB_OUTPUT", "")
     github_env = os.environ.get("GITHUB_ENV", "")
-    
+
     # Check branch condition (keep behavior compatible with your Bash snippet).
-    if (not allow_non_main_release) and (os.environ.get("GITHUB_REF", "") != "refs/heads/main"):
-        print("🚫 Not on 'main' branch and non-main releases are disabled – skipping version check.")
+    if (not allow_non_main_release) and (
+        os.environ.get("GITHUB_REF", "") != "refs/heads/main"
+    ):
+        print(
+            "🚫 Not on 'main' branch and non-main releases are disabled – skipping version check."
+        )
         append_kv(github_output, "version_bumped", "false")
         append_kv(github_env, "VERSION_BUMPED", "false")
         return
@@ -207,15 +217,19 @@ def main() -> None:
     path.write_text(new_content, encoding="utf-8")
 
     run_git(["add", str(path)])
-    run_git([
-        "commit",
-        "-m", f"chore(version): bump version to {new_version}",
-        "-m", "Automated version bump based on commit message patterns."
-    ])
+    run_git(
+        [
+            "commit",
+            "-m",
+            f"chore(version): bump version to {new_version}",
+            "-m",
+            "Automated version bump based on commit message patterns.",
+        ]
+    )
 
     append_kv(github_output, "version_bumped", "true")
     append_kv(github_env, "VERSION_BUMPED", "true")
-    
+
     append_kv(github_output, "version_after", new_version)
     append_kv(github_env, "VERSION_AFTER", new_version)
 
