@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.9.0..v1.9.1) - 2026-05-10
+
+### 🐛 Bug Fixes
+
+- *(scripts)* Accept dotted non-prerelease version suffixes - ([7646628](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/7646628aa7ebf8a5f4d3679dd2f01435e4f1d916))
+
 ## [1.9.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.8.2..v1.9.0) - 2026-04-14
 
 ### 🚀 Features
