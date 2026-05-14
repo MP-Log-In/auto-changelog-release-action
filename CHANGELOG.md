@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.9.1..v1.9.2) - 2026-05-14
+
+### 🐛 Bug Fixes
+
+- *(scripts)* Simplify prerelease suffix parsing and bump logic - ([268427c](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/268427c324672f1f56f20e43662dbb29bce7a9da))
+
 ## [1.9.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.9.0..v1.9.1) - 2026-05-10
 
 ### 🐛 Bug Fixes
