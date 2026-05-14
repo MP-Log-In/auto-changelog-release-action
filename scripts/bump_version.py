@@ -3,7 +3,7 @@
 Semantic version bump script based on commit message regex matching.
 
 - Extracts version via regex from a version file
-- Supports semver plus dotted suffixes: X.Y.Z-label.extra
+- Supports semver plus arbitrary suffixes after the first dash: X.Y.Z-suffix
 - If a configured pre-release exists (for example X.Y.Z-pre.N), ONLY its counter is incremented
 - Otherwise, major/minor/patch bump is applied and any suffix is preserved
 - Replaces exactly the regex match (not a blind string replace)
@@ -12,7 +12,6 @@ Semantic version bump script based on commit message regex matching.
 
 from __future__ import annotations
 
-import argparse
 import os
 import re
 import subprocess
@@ -83,10 +82,7 @@ VERSION_RE = re.compile(
     r"""
     ^
     (?P<core>\d+\.\d+\.\d+)
-    (?:
-        -
-        (?P<suffix>(?P<label>[A-Za-z]+)(?:\.(?P<tail>.+))?)
-    )?
+    (?:-(?P<suffix>.+))?
     $
     """,
     re.VERBOSE,
@@ -105,13 +101,17 @@ def bump_version(version: str, bump: str) -> str:
 
     core = m.group("core")
     suffix = m.group("suffix")
-    label = m.group("label")
-    tail = m.group("tail")
 
     major, minor, patch = map(int, core.split("."))
 
-    if label and label in PRE_RELEASE_POSTFIXES and tail and tail.isdigit():
-        return f"{core}-{label}.{int(tail) + 1}"
+    if suffix:
+        prerelease_label, separator, prerelease_number = suffix.partition(".")
+        if (
+            separator
+            and prerelease_label in PRE_RELEASE_POSTFIXES
+            and prerelease_number.isdigit()
+        ):
+            return f"{core}-{prerelease_label}.{int(prerelease_number) + 1}"
 
     if bump == "major":
         bumped_core = f"{major + 1}.0.0"
