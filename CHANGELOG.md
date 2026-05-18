@@ -364,4 +364,3 @@ All notable changes to this project will be documented in this file.
 - *(workflows)* Update release step with descriptive name - ([e73d132](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/e73d1324b7ea2095ef52512d0c140ef9a11d66f9))
 - *(gitignore)* Add rule to exclude environment files - ([14f0a9b](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/14f0a9b4b19e2f981417292a0b844485fbe2018e))
 
-

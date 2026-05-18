@@ -7,5 +7,7 @@
         "activityBarBadge.background": "#1fa090",
         "activityBarBadge.foreground": "#e7e7e7"
     },
-    "peacock.color": "#e6d97c"
+    "peacock.color": "#e6d97c",
+    "python-envs.defaultEnvManager": "ms-python.python:poetry",
+    "python-envs.defaultPackageManager": "ms-python.python:poetry"
 }

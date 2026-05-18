@@ -59,93 +59,33 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up git
-      shell: bash
-      run: |
-        ${{ github.action_path }}/scripts/setup-git.sh \
-          "${{ inputs.author_name }}" \
-          "${{ inputs.author_email }}"
-
-    - name: Bump version from commits
-      id: bump
-      shell: bash
-      env:
-        GITHUB_OUTPUT: ${{ github.output }}
-        GITHUB_ENV: ${{ github.env }}
-
-        VERSION_FILE: ${{ inputs.version_file }}
-        VERSION_REGEX: ${{ inputs.version_regex }}
-
-        MAJOR_PATTERNS: ${{ inputs.major_patterns }}
-        MINOR_PATTERNS: ${{ inputs.minor_patterns }}
-        PATCH_PATTERNS: ${{ inputs.patch_patterns }}
-
-        RANGE: ${{ github.event.before }}..${{ inputs.github_sha_override || github.sha || '' }}
-
-        ALLOW_NON_MAIN_RELEASE: ${{ inputs.allow_non_main_release }}
-      run: |
-        ${{ github.action_path }}/scripts/bump_version.py
-
-    - name: Detect version change
-      shell: bash
-      id: detect
-      env:
-        GITHUB_EVENT_BEFORE: ${{ github.event.before || '' }}
-        GITHUB_SHA: ${{ inputs.github_sha_override || github.sha || '' }}
-        GITHUB_REF: ${{ github.ref || '' }}
-        ALLOW_NON_MAIN_RELEASE: ${{ inputs.allow_non_main_release }}
-        VERSION_FILE: ${{ inputs.version_file }}
-        VERSION_REGEX: ${{ inputs.version_regex }}
-      run: |
-        if [ "${{ steps.bump.outputs.version_bumped }}" = "true" ]; then
-          echo "Version was bumped in previous step."
-          echo "version_changed=true" >> "$GITHUB_OUTPUT"
-          echo "VERSION_CHANGED=true" >> "$GITHUB_ENV"
-          echo "version_after=${{ steps.bump.outputs.version_after }}" >> "$GITHUB_OUTPUT"
-          echo "VERSION_AFTER=${{ steps.bump.outputs.version_after }}" >> "$GITHUB_ENV"
-        else
-          ${{ github.action_path }}/scripts/detect-version-change.py
-        fi
-
-    - name: Read CLIFF_VERSION
-      shell: bash
-      id: cliff_version
-      run: |
-        ${{ github.action_path }}/scripts/read-cliff-version.sh
-
-    - name: Generate git-cliff config
-      env:
-        ACTION_PATH: ${{ github.action_path }}
-      shell: bash
-      run: |
-        ${{ github.action_path }}/scripts/generate-git-cliff-config.sh
-
-    - name: Install git-cliff
-      shell: bash
-      run: |
-        ${{ github.action_path }}/scripts/install-git-cliff.sh "${{ steps.cliff_version.outputs.version }}"
-
     - name: Install Python
       shell: bash
       run: |
         ${{ github.action_path }}/scripts/install-python.sh
 
-    - name: Generate and commit changelog (unreleased)
-      if: steps.detect.outputs.version_changed == 'false'
+    - name: Run action pipeline
       shell: bash
       env:
-        GITEA_TOKEN: ${{ inputs.token || '' }}
-        GITEA_API_URL: ${{ github.server_url }}
-      run: |
-        ${{ github.action_path }}/scripts/generate-unreleased-changelog.sh
-
-    - name: Release from VERSION
-      if: steps.detect.outputs.version_changed == 'true'
-      shell: bash
-      env:
+        GITHUB_OUTPUT: ${{ github.output }}
+        GITHUB_ENV: ${{ github.env }}
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+        AUTHOR_NAME: ${{ inputs.author_name }}
+        AUTHOR_EMAIL: ${{ inputs.author_email }}
+        ALLOW_NON_MAIN_RELEASE: ${{ inputs.allow_non_main_release }}
+        VERSION_FILE: ${{ inputs.version_file }}
+        VERSION_REGEX: ${{ inputs.version_regex }}
+        MAJOR_PATTERNS: ${{ inputs.major_patterns }}
+        MINOR_PATTERNS: ${{ inputs.minor_patterns }}
+        PATCH_PATTERNS: ${{ inputs.patch_patterns }}
+        RANGE: ${{ github.event.before }}..${{ inputs.github_sha_override || github.sha || '' }}
+        GITHUB_EVENT_BEFORE: ${{ github.event.before || '' }}
+        GITHUB_SHA: ${{ inputs.github_sha_override || github.sha || '' }}
+        GITHUB_REF: ${{ github.ref || '' }}
+        GITHUB_API_URL: ${{ github.api_url || '' }}
+        GITHUB_SERVER_URL: ${{ github.server_url || '' }}
+        GITHUB_REPOSITORY: ${{ github.repository || '' }}
         RELEASE_PUBLISH_TOKEN: ${{ inputs.token || '' }}
-        GITEA_TOKEN: ${{ inputs.token || '' }}
-        GITEA_API_URL: ${{ github.server_url }}
-        VERSION_AFTER: ${{ steps.detect.outputs.version_after }}
       run: |
-        ${{ github.action_path }}/scripts/release-from-version.sh
+        PYTHONPATH="${{ github.action_path }}/src${PYTHONPATH:+:${PYTHONPATH}}" \
+          python3 -m auto_changelog_release_action
