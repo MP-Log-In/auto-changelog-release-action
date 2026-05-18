@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(workflows)* Bump release action and drop local cliff config - ([0c2efd1](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/0c2efd1c1c5ba31356ba91cef04d8dc3b6aede9f))
+
 ## [1.10.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.9.2..v1.10.0) - 2026-05-18
 
 ### 🚜 Refactor
