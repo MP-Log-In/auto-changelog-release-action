@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ◀️ Revert
+
+- Fix(scripts): simplify prerelease suffix parsing and bump logic - ([df72f71](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/df72f7100d4d6a039b4831c8429f7d42786625b8))
+
 ## [1.9.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.9.1..v1.9.2) - 2026-05-14
 
 ### 🐛 Bug Fixes
