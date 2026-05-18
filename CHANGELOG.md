@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### 🚜 Refactor
+
+- *(action)* Consolidate composite runtime into a tested Python package - ([8693707](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/8693707be088e8ad78d239e1c2751066f4710ebc))
+
 ### ◀️ Revert
 
 - Fix(scripts): simplify prerelease suffix parsing and bump logic - ([df72f71](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/df72f7100d4d6a039b4831c8429f7d42786625b8))
@@ -363,4 +367,5 @@ All notable changes to this project will be documented in this file.
 - *(config)* Add git-cliff configuration for changelog generation - ([e5bddac](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/e5bddac7481a16b43cc81ec115b22c1b13de7425))
 - *(workflows)* Update release step with descriptive name - ([e73d132](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/e73d1324b7ea2095ef52512d0c140ef9a11d66f9))
 - *(gitignore)* Add rule to exclude environment files - ([14f0a9b](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/14f0a9b4b19e2f981417292a0b844485fbe2018e))
+
 
