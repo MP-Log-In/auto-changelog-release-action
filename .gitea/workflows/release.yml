@@ -13,7 +13,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Release
-        uses: https://git.0xmax42.io/actions/auto-changelog-release-action@v0
+        uses: https://git.0xmax42.io/actions/auto-changelog-release-action@v1.10.0
         with:
           token: ${{ secrets.RELEASE_PUBLISH_TOKEN }}
           allow_non_main_release: "true"
