@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 📚 Documentation
+
+- Document prerelease handling and suffix bump behavior - ([4bcab4b](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/4bcab4b7403afbd46e52fb44827a319e0174e05d))
+
 ## [1.11.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.11.0..v1.11.1) - 2026-05-20
 
 ### 🐛 Bug Fixes
