@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.11.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.11.0..v1.11.1) - 2026-05-20
+
+### 🐛 Bug Fixes
+
+- *(versioning)* Extend suffix parsing for hyphenated labels and tails - ([73b9ab5](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/73b9ab5b0017fbc5259b1621216d758dae8d2913))
+
 ## [1.11.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.10.0..v1.11.0) - 2026-05-20
 
 ### 🚀 Features
