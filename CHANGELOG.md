@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 📚 Documentation
+
+- *(v2)* Mark auto-changelog-release-action v2 as deprecated - ([8525b56](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/8525b56aff464d6d879ed265f9f99638a32ea9f0))
+
 ## [2.0.9](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v2.0.8..v2.0.9) - 2025-07-04
 
 ### 🚀 Features
