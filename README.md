@@ -118,6 +118,23 @@ with:
 
 If the regex does not match, the action fails instead of guessing.
 
+### Pre-releases and version suffixes
+
+The action distinguishes between managed pre-releases and ordinary releases that happen to carry a suffix.
+
+- `pre`, `alpha`, and `beta` are treated as managed pre-release labels
+- managed pre-releases are recognized for release metadata and special prerelease handling
+- other suffixes are preserved, but they are not treated as pre-releases
+
+Examples:
+
+- `1.2.3-pre.4` is treated as a pre-release
+- `1.2.3-alpha.2` is treated as a pre-release
+- `1.2.3-beta.1` is treated as a pre-release
+- `0.1.6-gitea-runner.1.0.4-dev-4-9-g2208e7e` is treated as a normal release version with a preserved suffix
+
+When the action bumps a normal release version with a non-pre-release suffix, it bumps the semantic core and keeps the suffix. For example, `0.1.6-gitea-runner.1.0.4-dev-4-9-g2208e7e` becomes `0.1.7-gitea-runner.1.0.4-dev-4-9-g2208e7e` for a patch bump.
+
 ## Bump logic
 
 Automatic version bumps are driven by commit messages in the current push range.
