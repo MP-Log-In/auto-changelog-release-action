@@ -2,13 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [1.10.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.10.0..v1.10.0) - 2026-05-20
+
+### 🚀 Features
+
+- *(runtime)* Add host-aware GitHub release support - ([4e0aed7](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/4e0aed72d0c1498f32787172cb5ca6f33d75fe54))
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(workflows)* Bump release action and drop local cliff config - ([0c2efd1](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/0c2efd1c1c5ba31356ba91cef04d8dc3b6aede9f))
 
-## [1.10.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.9.2..v1.10.0) - 2026-05-18
+## [1.10.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.9.2..v1.10.0) - 2026-05-20
 
 ### 🚜 Refactor
 
