@@ -31,6 +31,16 @@ def test_parse_version_preserves_non_configured_suffix() -> None:
     assert parsed.is_configured_prerelease is False
 
 
+def test_parse_version_supports_hyphenated_non_prerelease_suffix() -> None:
+    parsed = parse_version("0.1.6-gitea-runner.1.0.4-dev-4-9-g2208e7e")
+
+    assert parsed.core == "0.1.6"
+    assert parsed.suffix == "gitea-runner.1.0.4-dev-4-9-g2208e7e"
+    assert parsed.label == "gitea-runner"
+    assert parsed.tail == "1.0.4-dev-4-9-g2208e7e"
+    assert parsed.is_configured_prerelease is False
+
+
 @pytest.mark.parametrize(
     ("current_version", "bump", "expected"),
     [
@@ -40,6 +50,11 @@ def test_parse_version_preserves_non_configured_suffix() -> None:
         ("1.2.3-pre.4", "patch", "1.2.3-pre.5"),
         ("1.2.3-alpha.9", "minor", "1.2.3-alpha.10"),
         ("1.2.3-miktex.26.2", "minor", "1.3.0-miktex.26.2"),
+        (
+            "0.1.6-gitea-runner.1.0.4-dev-4-9-g2208e7e",
+            "patch",
+            "0.1.7-gitea-runner.1.0.4-dev-4-9-g2208e7e",
+        ),
     ],
 )
 def test_bump_version_matches_current_rules(

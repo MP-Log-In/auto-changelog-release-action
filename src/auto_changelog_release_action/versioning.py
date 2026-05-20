@@ -19,7 +19,7 @@ VERSION_PATTERN = re.compile(
     (?P<core>\d+\.\d+\.\d+)
     (?:
         -
-        (?P<suffix>(?P<label>[A-Za-z]+)(?:\.(?P<tail>.+))?)
+        (?P<suffix>(?P<label>[A-Za-z][0-9A-Za-z-]*)(?:\.(?P<tail>[0-9A-Za-z][0-9A-Za-z.-]*))?)
     )?
     $
     """,
