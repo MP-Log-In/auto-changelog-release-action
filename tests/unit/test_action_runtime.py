@@ -3,9 +3,26 @@ from __future__ import annotations
 from pathlib import Path
 
 from auto_changelog_release_action import action_runtime
+from auto_changelog_release_action.runtime_host import RuntimeHost
 from auto_changelog_release_action.version_bump_flow import VersionBumpResult
 from auto_changelog_release_action.version_change_flow import VersionChangeResult
 from auto_changelog_release_action.versioning import default_version_regex_for_file
+
+
+def clear_runtime_environment(monkeypatch) -> None:
+    """Remove host-related environment variables so tests are hermetic in CI."""
+
+    for name in (
+        "GITHUB_API_URL",
+        "GITEA_API_URL",
+        "GITHUB_SERVER_URL",
+        "GITEA_SERVER_URL",
+        "GITHUB_REPOSITORY",
+        "GITEA_REPOSITORY",
+        "GITHUB_REF",
+        "GITEA_REF",
+    ):
+        monkeypatch.delenv(name, raising=False)
 
 
 def test_run_action_runtime_uses_api_url_for_release_requests(
@@ -16,6 +33,11 @@ def test_run_action_runtime_uses_api_url_for_release_requests(
 
     config = action_runtime.ActionRuntimeConfig(
         action_path=tmp_path,
+        host=RuntimeHost.GITEA,
+        api_url="https://api.example.invalid",
+        server_url="https://example.invalid",
+        repository="owner/repo",
+        git_ref="refs/heads/main",
         github_output="",
         github_env="",
         author_name="CI Bot",
@@ -29,12 +51,7 @@ def test_run_action_runtime_uses_api_url_for_release_requests(
         revision_range="before..after",
         github_event_before="before",
         github_sha="after",
-        github_ref="refs/heads/main",
-        github_api_url="https://api.example.invalid",
-        github_server_url="https://example.invalid",
-        github_repository="owner/repo",
         release_publish_token="token",
-        actions_runtime_token="",
     )
 
     monkeypatch.chdir(tmp_path)
@@ -93,6 +110,11 @@ def test_run_action_runtime_uses_default_version_regex_when_input_is_blank(
 
     config = action_runtime.ActionRuntimeConfig(
         action_path=tmp_path,
+        host=RuntimeHost.GITEA,
+        api_url="https://git.0xmax42.io/api/v1",
+        server_url="https://example.invalid",
+        repository="owner/repo",
+        git_ref="refs/heads/main",
         github_output="",
         github_env="",
         author_name="CI Bot",
@@ -106,12 +128,7 @@ def test_run_action_runtime_uses_default_version_regex_when_input_is_blank(
         revision_range="before..after",
         github_event_before="before",
         github_sha="after",
-        github_ref="refs/heads/main",
-        github_api_url="",
-        github_server_url="https://example.invalid",
-        github_repository="owner/repo",
         release_publish_token="",
-        actions_runtime_token="",
     )
 
     monkeypatch.chdir(tmp_path)
@@ -156,3 +173,138 @@ def test_run_action_runtime_uses_default_version_regex_when_input_is_blank(
         "bump_version_regex": expected_regex,
         "change_version_regex": expected_regex,
     }
+
+
+def test_config_from_environment_resolves_gitea_from_api_url(monkeypatch, tmp_path: Path) -> None:
+    clear_runtime_environment(monkeypatch)
+    monkeypatch.setenv("GITHUB_ACTION_PATH", str(tmp_path))
+    monkeypatch.setenv("RANGE", "before..after")
+    monkeypatch.setenv("GITEA_API_URL", "https://git.example.invalid/api/v1/")
+    monkeypatch.setenv("GITHUB_REPOSITORY", "actions/auto-changelog-release-action")
+    monkeypatch.setenv("GITHUB_REF", "refs/heads/main")
+
+    config = action_runtime.config_from_environment()
+
+    assert config.host is RuntimeHost.GITEA
+    assert config.api_url == "https://git.example.invalid/api/v1"
+    assert config.server_url == "https://git.example.invalid"
+    assert config.repository == "actions/auto-changelog-release-action"
+    assert config.git_ref == "refs/heads/main"
+
+
+def test_config_from_environment_prefers_gitea_host_on_mixed_runner_env(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
+    clear_runtime_environment(monkeypatch)
+    monkeypatch.setenv("GITHUB_ACTION_PATH", str(tmp_path))
+    monkeypatch.setenv("RANGE", "before..after")
+    monkeypatch.setenv("GITEA_ACTIONS", "true")
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    monkeypatch.setenv("GITEA_API_URL", "https://git.example.invalid/api/v1")
+    monkeypatch.setenv("GITHUB_API_URL", "https://git.example.invalid/api/v1")
+    monkeypatch.setenv("GITHUB_SERVER_URL", "https://git.example.invalid")
+    monkeypatch.setenv("GITHUB_REPOSITORY", "actions/auto-changelog-release-action")
+    monkeypatch.setenv("GITHUB_REF", "refs/heads/main")
+
+    config = action_runtime.config_from_environment()
+
+    assert config.host is RuntimeHost.GITEA
+    assert config.api_url == "https://git.example.invalid/api/v1"
+    assert config.server_url == "https://git.example.invalid"
+    assert config.repository == "actions/auto-changelog-release-action"
+    assert config.git_ref == "refs/heads/main"
+
+
+def test_config_from_environment_does_not_use_fixed_gitea_url_defaults(
+    monkeypatch, tmp_path: Path
+) -> None:
+    clear_runtime_environment(monkeypatch)
+    monkeypatch.setenv("GITHUB_ACTION_PATH", str(tmp_path))
+    monkeypatch.setenv("RANGE", "before..after")
+
+    config = action_runtime.config_from_environment()
+
+    assert config.host is RuntimeHost.GITEA
+    assert config.api_url == ""
+    assert config.server_url == ""
+
+
+def test_config_from_environment_resolves_github_from_server_url(
+    monkeypatch, tmp_path: Path
+) -> None:
+    clear_runtime_environment(monkeypatch)
+    monkeypatch.setenv("GITHUB_ACTION_PATH", str(tmp_path))
+    monkeypatch.setenv("RANGE", "before..after")
+    monkeypatch.setenv("GITHUB_SERVER_URL", "https://github.com/")
+    monkeypatch.setenv("GITHUB_REPOSITORY", "actions/auto-changelog-release-action")
+    monkeypatch.setenv("GITHUB_REF", "refs/heads/main")
+
+    config = action_runtime.config_from_environment()
+
+    assert config.host is RuntimeHost.GITHUB
+    assert config.api_url == "https://api.github.com"
+    assert config.server_url == "https://github.com"
+    assert config.repository == "actions/auto-changelog-release-action"
+    assert config.git_ref == "refs/heads/main"
+
+
+def test_run_action_runtime_requires_explicit_release_token(monkeypatch, tmp_path: Path) -> None:
+    config = action_runtime.ActionRuntimeConfig(
+        action_path=tmp_path,
+        host=RuntimeHost.GITHUB,
+        api_url="https://api.github.com",
+        server_url="https://github.com",
+        repository="owner/repo",
+        git_ref="refs/heads/main",
+        github_output="",
+        github_env="",
+        author_name="CI Bot",
+        author_email="ci@example.invalid",
+        allow_non_main_release=False,
+        version_file="VERSION",
+        version_regex="^(.*)$",
+        major_patterns="",
+        minor_patterns="",
+        patch_patterns="",
+        revision_range="before..after",
+        github_event_before="before",
+        github_sha="after",
+        release_publish_token="",
+    )
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(action_runtime, "configure_git_author", lambda *_args: None)
+    monkeypatch.setattr(
+        action_runtime,
+        "run_version_bump",
+        lambda _config: VersionBumpResult(version_bumped=False),
+    )
+    monkeypatch.setattr(
+        action_runtime,
+        "run_version_change_detection",
+        lambda _config: VersionChangeResult(
+            version_changed=True,
+            version_before="0.0.1",
+            version_after="0.0.2",
+        ),
+    )
+    monkeypatch.setattr(
+        action_runtime, "write_version_bump_outputs", lambda *_args, **_kwargs: None
+    )
+    monkeypatch.setattr(
+        action_runtime,
+        "write_version_change_outputs",
+        lambda *_args, **_kwargs: None,
+    )
+    monkeypatch.setattr(action_runtime, "ensure_cliff_config", lambda *_args, **_kwargs: False)
+    monkeypatch.setattr(
+        action_runtime, "install_git_cliff", lambda *_args, **_kwargs: "git-cliff 2.10.1"
+    )
+
+    try:
+        action_runtime.run_action_runtime(config)
+    except RuntimeError as error:
+        assert str(error) == "Release publishing requires the explicit token input."
+    else:
+        raise AssertionError("expected explicit token error")

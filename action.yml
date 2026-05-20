@@ -1,9 +1,9 @@
 name: Auto Changelog & Release
-description: "One-stop composite action for version-bump detection, changelog generation and Gitea release."
+description: "One-stop composite action for version-bump detection, changelog generation, and host-aware Gitea or GitHub releases."
 
 inputs:
   token:
-    description: "Gitea/GitHub PAT für Release-API"
+    description: "Explicit Gitea or GitHub token for release publication."
     required: false
     default: ""
   author_name:
@@ -33,7 +33,7 @@ inputs:
   github_sha_override:
     description: >
       Override for the GitHub SHA used to determine the commit range for version bump detection.
-      Useful for testing or non-standard workflows. If empty, defaults to ${{ github.sha }}.
+      Useful for testing or non-standard workflows. If empty, the triggering commit SHA is used.
     required: false
     default: ""
 

@@ -15,8 +15,6 @@ from pathlib import Path
 
 from auto_changelog_release_action.changelog_context import augment_context_json
 from auto_changelog_release_action.process_utils import run_command, run_git
-from auto_changelog_release_action.repository import split_repository_slug
-from auto_changelog_release_action.unreleased_changelog import branch_name_from_ref
 from auto_changelog_release_action.versioning import PRE_RELEASE_LABELS, parse_version
 
 RELEASE_COMMIT_MESSAGE_TEMPLATE = "chore(changelog): update changelog for v{version}"
@@ -34,7 +32,6 @@ class ReleaseConfig:
     repository_owner: str
     repository_name: str
     publish_token: str
-    using_runtime_token: bool
 
 
 def is_configured_prerelease_version(version: str) -> bool:
@@ -180,8 +177,10 @@ def create_release(
 ) -> None:
     """Create the remote release with retries for transient failures."""
 
+    if not config.publish_token:
+        raise RuntimeError("Release publishing requires the explicit token input.")
     if not config.api_url:
-        raise RuntimeError("GITHUB_API_URL or GITEA_API_URL is not set")
+        raise RuntimeError("Release API URL is not set")
 
     release_body = release_api_body(release_notes)
     endpoint = (
@@ -242,31 +241,6 @@ def create_release(
         sleep_fn(delay_seconds * attempt)
 
 
-def config_from_environment() -> ReleaseConfig:
-    """Build a release configuration from environment variables."""
-
-    version = os.getenv("VERSION_AFTER", "")
-    if not version:
-        raise RuntimeError("❌ VERSION file not found")
-
-    github_ref = os.getenv("GITHUB_REF", "")
-    repository_owner, repository_name = split_repository_slug(os.getenv("GITHUB_REPOSITORY", ""))
-    explicit_token = os.getenv("RELEASE_PUBLISH_TOKEN", "")
-    runtime_token = os.getenv("ACTIONS_RUNTIME_TOKEN", "")
-
-    return ReleaseConfig(
-        changelog_file=Path("CHANGELOG.md"),
-        cliff_config=Path("cliff.toml"),
-        version=version,
-        git_branch=branch_name_from_ref(github_ref),
-        api_url=os.getenv("GITHUB_API_URL") or os.getenv("GITEA_API_URL", ""),
-        repository_owner=repository_owner,
-        repository_name=repository_name,
-        publish_token=explicit_token or runtime_token,
-        using_runtime_token=not explicit_token and bool(runtime_token),
-    )
-
-
 def run_release_flow(config: ReleaseConfig, *, cwd: Path) -> None:
     """Execute changelog generation, tagging, and release publication."""
 
@@ -278,14 +252,6 @@ def run_release_flow(config: ReleaseConfig, *, cwd: Path) -> None:
 
     commit_release_changelog(config, cwd=cwd)
     create_release_tag(config, release_notes, cwd=cwd)
-
-    if config.using_runtime_token:
-        print("::warning title=Limited Release Propagation::")
-        print("RELEASE_PUBLISH_TOKEN is not set. Using ACTIONS_RUNTIME_TOKEN instead.")
-        print(
-            "⚠️  Release events may not trigger other workflows if created with the runtime token."
-        )
-        print()
 
     prerelease = is_configured_prerelease_version(config.version)
     if prerelease:

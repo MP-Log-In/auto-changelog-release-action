@@ -17,3 +17,5 @@ jobs:
         with:
           token: ${{ secrets.RELEASE_PUBLISH_TOKEN }}
           allow_non_main_release: "true"
+          version_file: pyproject.toml
+          version_regex: '^version\s*=\s*"([^"]+)"'

@@ -4,13 +4,13 @@
 # Lines starting with "#" are comments.
 # Configuration options are organized into tables and keys.
 # See documentation for more information on available options.
-[remote.gitea]
+[remote.%REMOTE_TYPE%]
 owner = "%OWNER%"
 repo = "%REPO%"
 
 [changelog]
 postprocessors = [
-    { pattern = '<GITEA_URL>', replace = "%GITEA_SERVER_URL%" }, # replace gitea url
+    { pattern = '<SERVER_URL>', replace = "%SERVER_URL%" },
 ]
 
 header = """
@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.\n
 
 body = """
 {%- macro remote_url() -%}
-  <GITEA_URL>/{{ remote.gitea.owner }}/{{ remote.gitea.repo }}
+    <SERVER_URL>/{{ remote.%REMOTE_TYPE%.owner }}/{{ remote.%REMOTE_TYPE%.repo }}
 {%- endmacro -%}
 
 {%- set is_prerelease = extra and extra.pre_release -%}
@@ -35,7 +35,7 @@ body = """
 {% if version %}\
     {% if previous.version %}\
         ## [{{ version | trim_start_matches(pat="v") }}]\
-          ({{ self::remote_url() }}/compare/{{ previous.version }}..{{ version }}){% if is_prerelease %} (pre-release){% endif %} - {{ timestamp | date(format="%Y-%m-%d") }}
+          ({{ self::remote_url() }}/compare/{{ previous.version }}%COMPARE_OPERATOR%{{ version }}){% if is_prerelease %} (pre-release){% endif %} - {{ timestamp | date(format="%Y-%m-%d") }}
     {% else %}\
         ## [{{ version | trim_start_matches(pat="v") }}]{% if is_prerelease %} (pre-release){% endif %} - {{ timestamp | date(format="%Y-%m-%d") }}
     {% endif %}\

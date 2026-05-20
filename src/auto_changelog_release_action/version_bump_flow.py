@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -13,6 +14,8 @@ from auto_changelog_release_action.versioning import (
     parse_patterns,
     replace_version,
 )
+
+ZERO_SHA = "0" * 40
 
 
 @dataclass(frozen=True)
@@ -43,10 +46,36 @@ def run_git(args: list[str]) -> str:
     return run_git_stdout(args)
 
 
+def resolve_revision_selector(revision_range: str) -> str:
+    """Normalize a revision selector so push events with no before SHA remain usable."""
+
+    if ".." not in revision_range:
+        return revision_range
+
+    commit_before, commit_after = revision_range.split("..", maxsplit=1)
+    if commit_before and commit_before != ZERO_SHA:
+        return revision_range
+    if not commit_after:
+        return ""
+
+    try:
+        parent = run_git(["rev-parse", f"{commit_after}^"])
+    except subprocess.CalledProcessError:
+        return commit_after
+
+    if not parent:
+        return commit_after
+    return f"{parent}..{commit_after}"
+
+
 def get_commit_messages(revision_range: str) -> list[str]:
     """Return commit messages from the configured revision range."""
 
-    output = run_git(["log", "--format=%B%x00", revision_range])
+    revision_selector = resolve_revision_selector(revision_range)
+    if not revision_selector:
+        return []
+
+    output = run_git(["log", "--format=%B%x00", revision_selector])
     return [message.strip() for message in output.split("\x00") if message.strip()]
 
 

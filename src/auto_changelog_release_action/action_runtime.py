@@ -8,15 +8,15 @@ from pathlib import Path
 
 from auto_changelog_release_action.actions_io import append_kv
 from auto_changelog_release_action.cliff_config import (
-    CLIFF_TEMPLATE_NAME,
     DEFAULT_CLIFF_CONFIG,
-    DEFAULT_GITEA_SERVER_URL,
     ensure_cliff_config,
     read_cliff_version,
 )
 from auto_changelog_release_action.git_setup import configure_git_author
 from auto_changelog_release_action.install_git_cliff import install_git_cliff
 from auto_changelog_release_action.release_flow import ReleaseConfig, run_release_flow
+from auto_changelog_release_action.repository import split_repository_slug
+from auto_changelog_release_action.runtime_host import RuntimeHost, resolve_runtime_host
 from auto_changelog_release_action.unreleased_changelog import (
     UnreleasedChangelogConfig,
     run_unreleased_changelog_flow,
@@ -34,6 +34,11 @@ class ActionRuntimeConfig:
     """Resolved inputs, GitHub context, and tokens for one action run."""
 
     action_path: Path
+    host: RuntimeHost
+    api_url: str
+    server_url: str
+    repository: str
+    git_ref: str
     github_output: str
     github_env: str
     author_name: str
@@ -47,12 +52,7 @@ class ActionRuntimeConfig:
     revision_range: str
     github_event_before: str
     github_sha: str
-    github_ref: str
-    github_api_url: str
-    github_server_url: str
-    github_repository: str
     release_publish_token: str
-    actions_runtime_token: str
 
 
 def bool_string(value: bool) -> str:
@@ -98,8 +98,20 @@ def write_version_change_outputs(
 def config_from_environment() -> ActionRuntimeConfig:
     """Build the runtime configuration from process environment variables."""
 
+    resolved_runtime = resolve_runtime_host(
+        api_url=os.environ.get("GITHUB_API_URL") or os.environ.get("GITEA_API_URL", ""),
+        server_url=os.environ.get("GITHUB_SERVER_URL") or os.environ.get("GITEA_SERVER_URL", ""),
+        repository=os.environ.get("GITHUB_REPOSITORY") or os.environ.get("GITEA_REPOSITORY", ""),
+        ref=os.environ.get("GITHUB_REF") or os.environ.get("GITEA_REF", ""),
+    )
+
     return ActionRuntimeConfig(
         action_path=Path(os.environ["GITHUB_ACTION_PATH"]),
+        host=resolved_runtime.host,
+        api_url=resolved_runtime.api_url,
+        server_url=resolved_runtime.server_url,
+        repository=resolved_runtime.repository,
+        git_ref=resolved_runtime.ref,
         github_output=os.environ.get("GITHUB_OUTPUT", ""),
         github_env=os.environ.get("GITHUB_ENV", ""),
         author_name=os.environ.get("AUTHOR_NAME", ""),
@@ -113,12 +125,7 @@ def config_from_environment() -> ActionRuntimeConfig:
         revision_range=os.environ["RANGE"],
         github_event_before=os.environ.get("GITHUB_EVENT_BEFORE", ""),
         github_sha=os.environ.get("GITHUB_SHA", ""),
-        github_ref=os.environ.get("GITHUB_REF", ""),
-        github_api_url=os.environ.get("GITHUB_API_URL") or os.environ.get("GITEA_API_URL", ""),
-        github_server_url=os.environ.get("GITHUB_SERVER_URL", ""),
-        github_repository=os.environ.get("GITHUB_REPOSITORY", ""),
         release_publish_token=os.environ.get("RELEASE_PUBLISH_TOKEN", ""),
-        actions_runtime_token=os.environ.get("ACTIONS_RUNTIME_TOKEN", ""),
     )
 
 
@@ -139,7 +146,7 @@ def run_action_runtime(config: ActionRuntimeConfig) -> None:
             patch_patterns_raw=config.patch_patterns,
             revision_range=config.revision_range,
             allow_non_main_release=config.allow_non_main_release,
-            git_ref=config.github_ref,
+            git_ref=config.git_ref,
         )
     )
     write_version_bump_outputs(
@@ -156,7 +163,7 @@ def run_action_runtime(config: ActionRuntimeConfig) -> None:
     else:
         detect_result = run_version_change_detection(
             VersionChangeConfig(
-                git_ref=config.github_ref,
+                git_ref=config.git_ref,
                 commit_before=config.github_event_before,
                 commit_after=config.github_sha,
                 allow_non_main_release=config.allow_non_main_release,
@@ -186,28 +193,29 @@ def run_action_runtime(config: ActionRuntimeConfig) -> None:
 
     ensure_cliff_config(
         cliff_path,
-        template_path=config.action_path / CLIFF_TEMPLATE_NAME,
-        repository=config.github_repository,
-        server_url=config.github_server_url or DEFAULT_GITEA_SERVER_URL,
+        templates_root=config.action_path,
+        host=config.host,
+        repository=config.repository,
+        server_url=config.server_url,
     )
     install_git_cliff(cliff_version)
 
     if version_changed:
         if not version_after:
             raise RuntimeError("VERSION_AFTER is required for release publishing")
-        owner, repo = config.github_repository.split("/", 1)
+        if not config.release_publish_token:
+            raise RuntimeError("Release publishing requires the explicit token input.")
+        owner, repo = split_repository_slug(config.repository)
         run_release_flow(
             ReleaseConfig(
                 changelog_file=Path("CHANGELOG.md"),
                 cliff_config=Path(DEFAULT_CLIFF_CONFIG),
                 version=version_after,
-                git_branch=config.github_ref.removeprefix("refs/heads/"),
-                api_url=config.github_api_url,
+                git_branch=config.git_ref.removeprefix("refs/heads/"),
+                api_url=config.api_url,
                 repository_owner=owner,
                 repository_name=repo,
-                publish_token=config.release_publish_token or config.actions_runtime_token,
-                using_runtime_token=not bool(config.release_publish_token)
-                and bool(config.actions_runtime_token),
+                publish_token=config.release_publish_token,
             ),
             cwd=Path.cwd(),
         )
@@ -217,7 +225,7 @@ def run_action_runtime(config: ActionRuntimeConfig) -> None:
         UnreleasedChangelogConfig(
             changelog_file=Path("CHANGELOG.md"),
             cliff_config=Path(DEFAULT_CLIFF_CONFIG),
-            git_branch=config.github_ref.removeprefix("refs/heads/"),
+            git_branch=config.git_ref.removeprefix("refs/heads/"),
         ),
         cwd=Path.cwd(),
     )

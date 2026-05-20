@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+from pathlib import Path
+from typing import Any
+
 from auto_changelog_release_action.release_flow import (
+    ReleaseConfig,
+    create_release,
     extract_release_notes,
     is_configured_prerelease_version,
     release_api_body,
@@ -33,3 +38,90 @@ def test_is_configured_prerelease_version_uses_allowed_labels_only() -> None:
     assert is_configured_prerelease_version("1.2.3-beta") is True
     assert is_configured_prerelease_version("1.2.3-miktex.26.2") is False
     assert is_configured_prerelease_version("1.2.3") is False
+
+
+def test_create_release_requires_explicit_publish_token(tmp_path: Path) -> None:
+    config = ReleaseConfig(
+        changelog_file=tmp_path / "CHANGELOG.md",
+        cliff_config=tmp_path / "cliff.toml",
+        version="1.2.3",
+        git_branch="main",
+        api_url="https://api.github.com",
+        repository_owner="actions",
+        repository_name="auto-changelog-release-action",
+        publish_token="",
+    )
+
+    try:
+        create_release(config, "[1.2.3]\n- Added feature\n", prerelease=False)
+    except RuntimeError as error:
+        assert str(error) == "Release publishing requires the explicit token input."
+    else:
+        raise AssertionError("expected explicit token error")
+
+
+def test_create_release_requires_api_url(tmp_path: Path) -> None:
+    config = ReleaseConfig(
+        changelog_file=tmp_path / "CHANGELOG.md",
+        cliff_config=tmp_path / "cliff.toml",
+        version="1.2.3",
+        git_branch="main",
+        api_url="",
+        repository_owner="actions",
+        repository_name="auto-changelog-release-action",
+        publish_token="test-token",
+    )
+
+    try:
+        create_release(config, "[1.2.3]\n- Added feature\n", prerelease=False)
+    except RuntimeError as error:
+        assert str(error) == "Release API URL is not set"
+    else:
+        raise AssertionError("expected missing api url error")
+
+
+def test_create_release_uses_normalized_release_endpoint(monkeypatch, tmp_path: Path) -> None:
+    config = ReleaseConfig(
+        changelog_file=tmp_path / "CHANGELOG.md",
+        cliff_config=tmp_path / "cliff.toml",
+        version="1.2.3",
+        git_branch="main",
+        api_url="https://api.example.invalid/",
+        repository_owner="actions",
+        repository_name="auto-changelog-release-action",
+        publish_token="test-token",
+    )
+    captured: dict[str, Any] = {}
+
+    class FakeResponse:
+        def __enter__(self) -> FakeResponse:
+            return self
+
+        def __exit__(self, exc_type, exc, tb) -> None:
+            return None
+
+        def getcode(self) -> int:
+            return 201
+
+        def read(self) -> bytes:
+            return b'{"ok": true}'
+
+    def fake_urlopen(request):
+        captured["url"] = request.full_url
+        captured["authorization"] = request.get_header("Authorization")
+        captured["content_type"] = request.get_header("Content-type")
+        captured["method"] = request.get_method()
+        captured["payload"] = request.data.decode("utf-8")
+        return FakeResponse()
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+
+    create_release(config, "[1.2.3]\n- Added feature\n", prerelease=False)
+
+    assert captured == {
+        "url": "https://api.example.invalid/repos/actions/auto-changelog-release-action/releases",
+        "authorization": "token test-token",
+        "content_type": "application/json",
+        "method": "POST",
+        "payload": '{"tag_name": "v1.2.3", "target_commitish": "main", "name": "Release v1.2.3", "body": "- Added feature\\n", "draft": false, "prerelease": false}',
+    }
