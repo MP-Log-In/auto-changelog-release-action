@@ -2,11 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [1.12.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.11.1..v1.12.0) - 2026-05-21
+
+### 🚀 Features
+
+- *(changelog)* Support dedicated release note commits - ([d1a537b](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/d1a537b804d99885d5c6f314b5bac2d249df3542))
 
 ### 📚 Documentation
 
+- Document dedicated release notes changelog grouping - ([4abf4d6](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/4abf4d683aa864bd5a77066d7f16f9a0454b2580))
 - Document prerelease handling and suffix bump behavior - ([4bcab4b](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/4bcab4b7403afbd46e52fb44827a319e0174e05d))
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump package version to 1.12.0 - ([ed49da1](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/ed49da1dbb89fac550cd414633585c04707c7e83))
 
 ## [1.11.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.11.0..v1.11.1) - 2026-05-20
 
