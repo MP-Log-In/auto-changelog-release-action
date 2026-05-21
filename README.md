@@ -149,6 +149,30 @@ When a bump is triggered, the action updates `version_file`, commits the change,
 
 If no bump is triggered, the action compares the version value across commits. A release is created only when the version actually changed.
 
+## Changelog grouping
+
+The bundled `git-cliff` configuration groups conventional commits into fixed changelog sections such as features, fixes, documentation, and refactors.
+
+There is one special-purpose commit type for manually authored release notes:
+
+- `chore(releasenotes): ...`
+
+Commits matched by that parser are rendered into a dedicated `Release Notes` section at the top of the generated release entry. Unlike normal commit groups, their commit bodies are rendered as prose instead of bullet list items.
+
+That makes them useful for curated notes such as migration hints, operator instructions, or rollout details that should appear exactly as written.
+
+Example:
+
+```text
+chore(releasenotes): summarize rollout impact
+
+This release changes the default cache layout.
+
+Clear the old cache directory before the first restart.
+```
+
+If a `chore(releasenotes)` commit has no body, the dedicated section is omitted and the normal grouped changelog rendering remains unchanged for all other commits.
+
 ## Notes
 
 - `actions/checkout` or the Gitea equivalent should fetch full history. `fetch-depth: 0` is the safest default.
