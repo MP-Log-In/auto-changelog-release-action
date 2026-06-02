@@ -14,7 +14,11 @@ from auto_changelog_release_action.cliff_config import (
 )
 from auto_changelog_release_action.git_setup import configure_git_author
 from auto_changelog_release_action.install_git_cliff import install_git_cliff
-from auto_changelog_release_action.release_flow import ReleaseConfig, run_release_flow
+from auto_changelog_release_action.release_flow import (
+    ReleaseConfig,
+    ReleaseFlowResult,
+    run_release_flow,
+)
 from auto_changelog_release_action.repository import split_repository_slug
 from auto_changelog_release_action.runtime_host import RuntimeHost, resolve_runtime_host
 from auto_changelog_release_action.unreleased_changelog import (
@@ -93,6 +97,23 @@ def write_version_change_outputs(
     if version_after is not None:
         append_kv(config.github_output, "version_after", version_after)
         append_kv(config.github_env, "VERSION_AFTER", version_after)
+
+
+def write_release_outputs(
+    config: ActionRuntimeConfig,
+    *,
+    release_created: bool,
+    release_prerelease: bool,
+    release_tag: str | None,
+) -> None:
+    """Persist release publication results to both Actions output channels."""
+
+    append_kv(config.github_output, "release_created", bool_string(release_created))
+    append_kv(config.github_env, "RELEASE_CREATED", bool_string(release_created))
+    append_kv(config.github_output, "release_prerelease", bool_string(release_prerelease))
+    append_kv(config.github_env, "RELEASE_PRERELEASE", bool_string(release_prerelease))
+    append_kv(config.github_output, "release_tag", release_tag or "")
+    append_kv(config.github_env, "RELEASE_TAG", release_tag or "")
 
 
 def config_from_environment() -> ActionRuntimeConfig:
@@ -206,7 +227,7 @@ def run_action_runtime(config: ActionRuntimeConfig) -> None:
         if not config.release_publish_token:
             raise RuntimeError("Release publishing requires the explicit token input.")
         owner, repo = split_repository_slug(config.repository)
-        run_release_flow(
+        release_result = run_release_flow(
             ReleaseConfig(
                 changelog_file=Path("CHANGELOG.md"),
                 cliff_config=Path(DEFAULT_CLIFF_CONFIG),
@@ -219,6 +240,12 @@ def run_action_runtime(config: ActionRuntimeConfig) -> None:
             ),
             cwd=Path.cwd(),
         )
+        write_release_outputs(
+            config,
+            release_created=release_result.release_created,
+            release_prerelease=release_result.release_prerelease,
+            release_tag=release_result.release_tag,
+        )
         return
 
     run_unreleased_changelog_flow(
@@ -228,4 +255,10 @@ def run_action_runtime(config: ActionRuntimeConfig) -> None:
             git_branch=config.git_ref.removeprefix("refs/heads/"),
         ),
         cwd=Path.cwd(),
+    )
+    write_release_outputs(
+        config,
+        release_created=False,
+        release_prerelease=False,
+        release_tag=None,
     )

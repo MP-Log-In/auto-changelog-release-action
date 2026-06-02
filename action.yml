@@ -56,6 +56,17 @@ inputs:
     required: false
     default: ""
 
+outputs:
+  release_created:
+    description: "Whether this run created a remote release."
+    value: ${{ steps.run_action_pipeline.outputs.release_created }}
+  release_prerelease:
+    description: "Whether the release for this run was marked as a prerelease."
+    value: ${{ steps.run_action_pipeline.outputs.release_prerelease }}
+  release_tag:
+    description: "The release tag derived from the resolved version."
+    value: ${{ steps.run_action_pipeline.outputs.release_tag }}
+
 runs:
   using: "composite"
   steps:
@@ -65,6 +76,7 @@ runs:
         ${{ github.action_path }}/scripts/install-python.sh
 
     - name: Run action pipeline
+      id: run_action_pipeline
       shell: bash
       env:
         GITHUB_OUTPUT: ${{ github.output }}

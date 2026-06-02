@@ -34,6 +34,15 @@ class ReleaseConfig:
     publish_token: str
 
 
+@dataclass(frozen=True)
+class ReleaseFlowResult:
+    """Result values exposed by the release publishing flow."""
+
+    release_created: bool
+    release_prerelease: bool
+    release_tag: str
+
+
 def is_configured_prerelease_version(version: str) -> bool:
     """Return whether a version should be published as a prerelease."""
 
@@ -174,7 +183,7 @@ def create_release(
     max_attempts: int = 3,
     delay_seconds: int = 5,
     sleep_fn: Callable[[float], None] = time.sleep,
-) -> None:
+) -> bool:
     """Create the remote release with retries for transient failures."""
 
     if not config.publish_token:
@@ -225,10 +234,10 @@ def create_release(
 
         if status == 201:
             print("✅ Release created (201).")
-            return
+            return True
         if status == 409:
             print("🔁 Release already exists (409) – skipping.")
-            return
+            return False
 
         suffix = status if status is not None else "request error"
         print(f"⚠️  Release attempt failed (HTTP {suffix})")
@@ -241,7 +250,7 @@ def create_release(
         sleep_fn(delay_seconds * attempt)
 
 
-def run_release_flow(config: ReleaseConfig, *, cwd: Path) -> None:
+def run_release_flow(config: ReleaseConfig, *, cwd: Path) -> ReleaseFlowResult:
     """Execute changelog generation, tagging, and release publication."""
 
     print(f"📦 Version: {config.version}")
@@ -253,9 +262,15 @@ def run_release_flow(config: ReleaseConfig, *, cwd: Path) -> None:
     commit_release_changelog(config, cwd=cwd)
     create_release_tag(config, release_notes, cwd=cwd)
 
+    tag_name = f"v{config.version}"
     prerelease = is_configured_prerelease_version(config.version)
     if prerelease:
         print("ℹ️  Detected configured pre-release label.")
 
-    create_release(config, release_notes, prerelease=prerelease)
+    release_created = create_release(config, release_notes, prerelease=prerelease)
     print("🎉 Workflow finished successfully.")
+    return ReleaseFlowResult(
+        release_created=release_created,
+        release_prerelease=prerelease,
+        release_tag=tag_name,
+    )

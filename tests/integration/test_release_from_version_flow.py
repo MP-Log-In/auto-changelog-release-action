@@ -394,6 +394,14 @@ def test_action_runtime_github_host_path_publishes_release(
     assert repo.head_subject() == "chore(changelog): update changelog for v1.2.3"
     assert remote_branch_head(remote_root, "main") == repo.rev_parse("HEAD")
     assert remote_tag_exists(remote_root, "v1.2.3") is True
+    github_output = (repo.root.parent / "github_output.txt").read_text(encoding="utf-8")
+    github_env = (repo.root.parent / "github_env.txt").read_text(encoding="utf-8")
+    assert "release_created=true" in github_output
+    assert "release_prerelease=false" in github_output
+    assert "release_tag=v1.2.3" in github_output
+    assert "RELEASE_CREATED=true" in github_env
+    assert "RELEASE_PRERELEASE=false" in github_env
+    assert "RELEASE_TAG=v1.2.3" in github_env
     assert len(recorder.requests) == 1
     request = recorder.requests[0]
     assert request["path"] == "/repos/actions/auto-changelog-release-action/releases"

@@ -139,8 +139,14 @@ def test_action_runtime_smoke_in_podman(tmp_path: Path) -> None:
 
     assert "version_bumped=false" in github_output
     assert "version_changed=false" in github_output
+    assert "release_created=false" in github_output
+    assert "release_prerelease=false" in github_output
+    assert "release_tag=" in github_output
     assert "VERSION_BUMPED=false" in github_env
     assert "VERSION_CHANGED=false" in github_env
+    assert "RELEASE_CREATED=false" in github_env
+    assert "RELEASE_PRERELEASE=false" in github_env
+    assert "RELEASE_TAG=" in github_env
     assert "All notable changes to this project will be documented in this file." in changelog
     assert remote_branch_subject(remote_root, "main") == (
         "chore(changelog): update unreleased changelog"

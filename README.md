@@ -76,6 +76,8 @@ jobs:
 
 The inputs are the same on Gitea and GitHub.
 
+The action also exposes outputs on the step that runs it via `steps.<id>.outputs.*`.
+
 ## Inputs
 
 | Input | Required | Default | Description |
@@ -90,6 +92,16 @@ The inputs are the same on Gitea and GitHub.
 | `major_patterns` | no | `""` | Newline-separated regular expressions that trigger a major version bump. |
 | `minor_patterns` | no | `""` | Newline-separated regular expressions that trigger a minor version bump. |
 | `patch_patterns` | no | `""` | Newline-separated regular expressions that trigger a patch version bump. |
+
+## Outputs
+
+| Output | Description |
+| --- | --- |
+| `release_created` | `true` when this run created the remote release, otherwise `false`. |
+| `release_prerelease` | `true` when the resolved version was published as a managed prerelease, otherwise `false`. |
+| `release_tag` | The tag derived from the resolved version, for example `v1.2.3`. Empty when no release path was taken. |
+
+When no release is published, the outputs are `release_created=false`, `release_prerelease=false`, and an empty `release_tag`.
 
 ## Version file and regex
 

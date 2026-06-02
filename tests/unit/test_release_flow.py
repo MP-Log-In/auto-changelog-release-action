@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import io
 from pathlib import Path
 from typing import Any
+from urllib.error import HTTPError
 
 from auto_changelog_release_action.release_flow import (
     ReleaseConfig,
@@ -116,7 +118,9 @@ def test_create_release_uses_normalized_release_endpoint(monkeypatch, tmp_path: 
 
     monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
 
-    create_release(config, "[1.2.3]\n- Added feature\n", prerelease=False)
+    created = create_release(config, "[1.2.3]\n- Added feature\n", prerelease=False)
+
+    assert created is True
 
     assert captured == {
         "url": "https://api.example.invalid/repos/actions/auto-changelog-release-action/releases",
@@ -125,3 +129,33 @@ def test_create_release_uses_normalized_release_endpoint(monkeypatch, tmp_path: 
         "method": "POST",
         "payload": '{"tag_name": "v1.2.3", "target_commitish": "main", "name": "Release v1.2.3", "body": "- Added feature\\n", "draft": false, "prerelease": false}',
     }
+
+
+def test_create_release_returns_false_when_release_already_exists(
+    monkeypatch, tmp_path: Path
+) -> None:
+    config = ReleaseConfig(
+        changelog_file=tmp_path / "CHANGELOG.md",
+        cliff_config=tmp_path / "cliff.toml",
+        version="1.2.3",
+        git_branch="main",
+        api_url="https://api.example.invalid",
+        repository_owner="actions",
+        repository_name="auto-changelog-release-action",
+        publish_token="test-token",
+    )
+
+    def fake_urlopen(_request):
+        raise HTTPError(
+            url="https://api.example.invalid/repos/actions/auto-changelog-release-action/releases",
+            code=409,
+            msg="Conflict",
+            hdrs=None,
+            fp=io.BytesIO(b'{"message": "release exists"}'),
+        )
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+
+    created = create_release(config, "[1.2.3]\n- Added feature\n", prerelease=False)
+
+    assert created is False
