@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.13.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.12.0..v1.13.0) - 2026-06-02
+
+### 🚀 Features
+
+- *(action)* Add outputs for release creation status and details - ([2dc1936](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/2dc1936b1f61912a2223b68f669bf182498edbcd))
+
 ## [1.12.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.11.1..v1.12.0) - 2026-05-21
 
 ### 🚀 Features
