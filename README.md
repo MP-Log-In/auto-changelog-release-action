@@ -74,6 +74,58 @@ jobs:
           version_regex: '^version\s*=\s*"([^"]+)"'
 ```
 
+#### Using with Output Variables
+
+By utilising the outputs of the action, you can avoid using a dedicated (long-lived) user token and react to a release in a subsequent job.
+
+```yaml
+name: Auto Changelog & Release
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      release_prerelease: ${{ steps.release.outputs.release_prerelease }}
+      release_tag: ${{ steps.release.outputs.release_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Release
+        id: release
+        uses: https://git.0xmax42.io/actions/auto-changelog-release-action@v1
+        with:
+          token: ${{ secrets.GITEA_TOKEN }}
+          allow_non_main_release: "true"
+          version_file: pyproject.toml
+          version_regex: '^version\s*=\s*"([^"]+)"'
+
+  build-release:
+    runs-on: ubuntu-latest
+    needs: release
+
+    if: ${{ needs.release.outputs.release_created == 'true' }}
+
+    env:
+      RELEASE_TAG: ${{ needs.release.outputs.release_tag }}
+      RELEASE_PRERELEASE: ${{ needs.release.outputs.release_prerelease }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release.outputs.release_tag }}
+          fetch-depth: 0
+
+      # Build and publish release artifacts here, using RELEASE_TAG and RELEASE_PRERELEASE as needed
+```
+---
+
 The inputs are the same on Gitea and GitHub.
 
 The action also exposes outputs on the step that runs it via `steps.<id>.outputs.*`.
