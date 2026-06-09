@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.13.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.13.0..v1.13.1) - 2026-06-09
+
+### 🐛 Bug Fixes
+
+- *(runtime)* Report external command failures cleanly - ([11624b9](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/11624b9b16d60e08feed09e0c2257c1df7617506))
+
 ## [1.13.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.12.0..v1.13.0) - 2026-06-02
 
 ### 🚀 Features
