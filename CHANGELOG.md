@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 📚 Documentation
+
+- *(readme)* Document output variable release workflow - ([334a07c](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/334a07c6c4f7111acdbf1a2f486c19fbe93645d5))
+
 ## [1.13.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.13.0..v1.13.1) - 2026-06-09
 
 ### 🐛 Bug Fixes
