@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import re
+import subprocess
+import sys
 
 from auto_changelog_release_action import action_runtime
 from auto_changelog_release_action.runtime_host import RuntimeHost
@@ -42,11 +44,15 @@ def format_runtime_host(host: RuntimeHost) -> str:
 def main() -> int:
     """Load environment config and execute the full action runtime."""
 
-    config = action_runtime.config_from_environment()
-    print(f"Action version: {resolve_action_version(config)}")
-    print(f"Detected runtime host: {format_runtime_host(config.host)}")
-    action_runtime.run_action_runtime(config)
-    return 0
+    try:
+        config = action_runtime.config_from_environment()
+        print(f"Action version: {resolve_action_version(config)}")
+        print(f"Detected runtime host: {format_runtime_host(config.host)}")
+        action_runtime.run_action_runtime(config)
+        return 0
+    except (subprocess.CalledProcessError, FileNotFoundError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
 
 from auto_changelog_release_action import __main__ as package_main
@@ -105,3 +106,33 @@ def test_main_logs_unknown_version_when_pyproject_version_is_missing(
         "Action version: unknown",
         "Detected runtime host: Gitea",
     ]
+
+
+def test_main_returns_non_zero_for_external_command_failures(
+    monkeypatch,
+    tmp_path: Path,
+    capsys,
+) -> None:
+    config = make_config(tmp_path, host=RuntimeHost.GITHUB)
+    (tmp_path / "pyproject.toml").write_text(
+        '[tool.poetry]\nversion = "1.10.0"\n',
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(package_main.action_runtime, "config_from_environment", lambda: config)
+
+    def fail(_config) -> None:
+        raise subprocess.CalledProcessError(
+            128,
+            ["git", "fetch", "--tags"],
+            stderr="fatal: could not read from remote repository\n",
+        )
+
+    monkeypatch.setattr(package_main.action_runtime, "run_action_runtime", fail)
+
+    result = package_main.main()
+
+    captured = capsys.readouterr()
+    assert result == 1
+    assert "CalledProcessError" not in captured.err
+    assert "returned non-zero exit status 128" in captured.err
