@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import lzma
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -18,6 +19,7 @@ DEFAULT_GIT_CLIFF_VERSION = "latest"
 DEFAULT_ARCH_OS = "x86_64-unknown-linux-gnu"
 DEFAULT_INSTALL_DIR = "/usr/local/bin"
 REPO = "orhun/git-cliff"
+VERSION_PATTERN = re.compile(r"^git-cliff\s+(\S+)$")
 
 
 def resolve_release_url(version: str) -> str:
@@ -62,6 +64,21 @@ def download_file(url: str, target_path: Path) -> None:
 
     with urllib.request.urlopen(url) as response, open(target_path, "wb") as handle:
         shutil.copyfileobj(response, handle)
+
+
+def get_git_cliff_version(binary_path: str | Path) -> str:
+    """Return the version reported by a git-cliff binary."""
+
+    completed = subprocess.run(
+        [str(binary_path), "--version"],
+        check=True,
+        text=True,
+        capture_output=True,
+    )
+    match = VERSION_PATTERN.fullmatch(completed.stdout.strip())
+    if match is None:
+        raise RuntimeError(f"❌ Unexpected git-cliff version output: {completed.stdout!r}")
+    return match.group(1)
 
 
 def extract_archive(archive_path: Path, destination: Path) -> None:
@@ -125,19 +142,14 @@ def install_git_cliff(
 ) -> str:
     """Install the requested git-cliff version and return the installed version string."""
 
+    requested_version = version or DEFAULT_GIT_CLIFF_VERSION
     existing_binary = shutil.which("git-cliff")
     if existing_binary:
-        completed = subprocess.run(
-            [existing_binary, "--version"],
-            check=True,
-            text=True,
-            capture_output=True,
-        )
-        installed_version = completed.stdout.splitlines()[0]
-        print(f"✅ Using existing {installed_version} at {existing_binary}")
-        return installed_version
+        existing_version = get_git_cliff_version(existing_binary)
+        if requested_version == DEFAULT_GIT_CLIFF_VERSION or existing_version == requested_version:
+            print(f"✅ Using existing git-cliff {existing_version} at {existing_binary}")
+            return existing_version
 
-    requested_version = version or DEFAULT_GIT_CLIFF_VERSION
     release_info = fetch_release_info(requested_version)
     resolved_version = str(release_info["tag_name"])
     asset_url = select_asset_url(release_info, arch_os)
@@ -153,12 +165,6 @@ def install_git_cliff(
         install_binary(binary_path, Path(install_dir))
 
     installed_binary = Path(install_dir) / "git-cliff"
-    completed = subprocess.run(
-        [str(installed_binary), "--version"],
-        check=True,
-        text=True,
-        capture_output=True,
-    )
-    installed_version = completed.stdout.splitlines()[0]
+    installed_version = get_git_cliff_version(installed_binary)
     print(f"✅ git-cliff {installed_version} installed in {install_dir}")
     return installed_version
