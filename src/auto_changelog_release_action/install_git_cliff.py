@@ -14,7 +14,7 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-DEFAULT_GIT_CLIFF_VERSION = "2.10.1"
+DEFAULT_GIT_CLIFF_VERSION = "latest"
 DEFAULT_ARCH_OS = "x86_64-unknown-linux-gnu"
 DEFAULT_INSTALL_DIR = "/usr/local/bin"
 REPO = "orhun/git-cliff"
@@ -124,6 +124,18 @@ def install_git_cliff(
     install_dir: str = DEFAULT_INSTALL_DIR,
 ) -> str:
     """Install the requested git-cliff version and return the installed version string."""
+
+    existing_binary = shutil.which("git-cliff")
+    if existing_binary:
+        completed = subprocess.run(
+            [existing_binary, "--version"],
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+        installed_version = completed.stdout.splitlines()[0]
+        print(f"✅ Using existing {installed_version} at {existing_binary}")
+        return installed_version
 
     requested_version = version or DEFAULT_GIT_CLIFF_VERSION
     release_info = fetch_release_info(requested_version)
