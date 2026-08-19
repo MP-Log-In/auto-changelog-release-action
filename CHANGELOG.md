@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- *(runtime)* Add git-cliff offline action input - ([059d7a4](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/059d7a4737c9b6c5d5fd74d4d2d8ceaef64cc0e8))
+
+### 📚 Documentation
+
+- *(readme)* Document git-cliff offline mode - ([b1517a2](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/b1517a24c45934e9c61b5f316f9ba0faf32bfbe3))
+
+### 🧪 Testing
+
+- *(runtime)* Cover git-cliff offline config handling - ([8973cf9](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/8973cf9c4738398f2331c2a7f4b316a0e9985588))
+
 ## [1.14.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.13.1..v1.14.0) - 2026-08-19
 
 ### 🚀 Features
