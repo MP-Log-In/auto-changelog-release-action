@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.15.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.2..v1.15.3) - 2026-08-19
+
+### 📦 Dependencies
+
+- *(deps)* Pin dependencies - ([91b7275](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/91b727560abb7af902940f40cd2e4fe16a1e76a9))
+
 ## [1.15.2](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.1..v1.15.2) - 2026-08-19
 
 ### ⚙️ Miscellaneous Tasks
