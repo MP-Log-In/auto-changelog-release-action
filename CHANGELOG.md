@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Treat dependency chores as patch releases - ([8d01759](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/8d017594bea84bad7bad5e5e82f2d2f30c376940))
+- Add Renovate configuration for Poetry updates - ([cd5f8ee](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/cd5f8eecb2333633d55f05d0a7f66a8c09ceeaef))
+
 ## [1.15.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.0..v1.15.1) - 2026-08-19
 
 ### 🐛 Bug Fixes
