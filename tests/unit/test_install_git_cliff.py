@@ -24,4 +24,4 @@ def test_install_git_cliff_uses_existing_binary_without_fetching(
 
     result = installer.install_git_cliff("2.10.1")
 
-    assert result == "git-cliff 2.10.1"
+    assert result == "2.10.1"
