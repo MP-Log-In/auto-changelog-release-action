@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.15.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.0..v1.15.1) - 2026-08-19
+
+### 🐛 Bug Fixes
+
+- *(runtime)* Default git-cliff offline mode to true - ([c104a2c](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/c104a2c071ef3d0f28342f3c5178c23e2b126604))
+
 ## [1.15.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.14.0..v1.15.0) - 2026-08-19
 
 ### 🚀 Features
