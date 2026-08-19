@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.15.4](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.3..v1.15.4) - 2026-08-19
+
+### 📦 Dependencies
+
+- *(deps)* Update dependency mypy to v2 - ([9d93a02](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/9d93a02dfe3ab25d9ca05b65795a73c53a2fb84d))
+
 ## [1.15.3](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.2..v1.15.3) - 2026-08-19
 
 ### 📦 Dependencies
