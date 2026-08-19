@@ -49,6 +49,7 @@ def test_run_action_runtime_uses_api_url_for_release_requests(
         major_patterns="",
         minor_patterns="",
         patch_patterns="",
+        git_cliff_offline=False,
         revision_range="before..after",
         github_event_before="before",
         github_sha="after",
@@ -129,6 +130,7 @@ def test_run_action_runtime_writes_release_outputs(monkeypatch, tmp_path: Path) 
         major_patterns="",
         minor_patterns="",
         patch_patterns="",
+        git_cliff_offline=False,
         revision_range="before..after",
         github_event_before="before",
         github_sha="after",
@@ -215,6 +217,7 @@ def test_run_action_runtime_uses_default_version_regex_when_input_is_blank(
         major_patterns="",
         minor_patterns="",
         patch_patterns="",
+        git_cliff_offline=False,
         revision_range="before..after",
         github_event_before="before",
         github_sha="after",
@@ -339,6 +342,84 @@ def test_config_from_environment_resolves_github_from_server_url(
     assert config.git_ref == "refs/heads/main"
 
 
+def test_config_from_environment_reads_git_cliff_offline(monkeypatch, tmp_path: Path) -> None:
+    clear_runtime_environment(monkeypatch)
+    monkeypatch.setenv("GITHUB_ACTION_PATH", str(tmp_path))
+    monkeypatch.setenv("RANGE", "before..after")
+    monkeypatch.setenv("GITHUB_SERVER_URL", "https://github.com")
+    monkeypatch.setenv("GITHUB_REPOSITORY", "actions/auto-changelog-release-action")
+    monkeypatch.setenv("GITHUB_REF", "refs/heads/main")
+    monkeypatch.setenv("GIT_CLIFF_OFFLINE", "true")
+
+    config = action_runtime.config_from_environment()
+
+    assert config.git_cliff_offline is True
+
+
+def test_run_action_runtime_sets_git_cliff_offline_env(monkeypatch, tmp_path: Path) -> None:
+    captured: dict[str, str | None] = {}
+    config = action_runtime.ActionRuntimeConfig(
+        action_path=tmp_path,
+        host=RuntimeHost.GITEA,
+        api_url="https://git.0xmax42.io/api/v1",
+        server_url="https://example.invalid",
+        repository="owner/repo",
+        git_ref="refs/heads/main",
+        github_output="",
+        github_env="",
+        author_name="CI Bot",
+        author_email="ci@example.invalid",
+        allow_non_main_release=False,
+        version_file="VERSION",
+        version_regex="^(.*)$",
+        major_patterns="",
+        minor_patterns="",
+        patch_patterns="",
+        git_cliff_offline=True,
+        revision_range="before..after",
+        github_event_before="before",
+        github_sha="after",
+        release_publish_token="",
+    )
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(action_runtime, "configure_git_author", lambda *_args: None)
+    monkeypatch.setattr(
+        action_runtime,
+        "run_version_bump",
+        lambda _config: VersionBumpResult(version_bumped=False),
+    )
+    monkeypatch.setattr(
+        action_runtime,
+        "run_version_change_detection",
+        lambda _config: VersionChangeResult(version_changed=False),
+    )
+    monkeypatch.setattr(
+        action_runtime, "write_version_bump_outputs", lambda *_args, **_kwargs: None
+    )
+    monkeypatch.setattr(
+        action_runtime,
+        "write_version_change_outputs",
+        lambda *_args, **_kwargs: None,
+    )
+    monkeypatch.setattr(action_runtime, "ensure_cliff_config", lambda *_args, **_kwargs: False)
+    monkeypatch.setattr(action_runtime, "install_git_cliff", lambda *_args, **_kwargs: "2.10.1")
+
+    def fake_run_unreleased_changelog_flow(*_args, **_kwargs) -> None:
+        captured["offline"] = action_runtime.os.environ.get("GIT_CLIFF_OFFLINE")
+
+    monkeypatch.setattr(
+        action_runtime,
+        "run_unreleased_changelog_flow",
+        fake_run_unreleased_changelog_flow,
+    )
+
+    action_runtime.run_action_runtime(config)
+
+    assert captured == {"offline": "true"}
+    assert action_runtime.os.environ.get("GIT_CLIFF_OFFLINE") is None
+
+
 def test_run_action_runtime_requires_explicit_release_token(monkeypatch, tmp_path: Path) -> None:
     config = action_runtime.ActionRuntimeConfig(
         action_path=tmp_path,
@@ -357,6 +438,7 @@ def test_run_action_runtime_requires_explicit_release_token(monkeypatch, tmp_pat
         major_patterns="",
         minor_patterns="",
         patch_patterns="",
+        git_cliff_offline=False,
         revision_range="before..after",
         github_event_before="before",
         github_sha="after",

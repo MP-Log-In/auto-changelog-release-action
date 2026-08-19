@@ -26,6 +26,7 @@ def make_config(tmp_path: Path, *, host: RuntimeHost) -> action_runtime.ActionRu
         major_patterns="",
         minor_patterns="",
         patch_patterns="",
+        git_cliff_offline=False,
         revision_range="before..after",
         github_event_before="",
         github_sha="",
