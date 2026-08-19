@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.15.5](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.4..v1.15.5) - 2026-08-19
+
+### 📦 Dependencies
+
+- *(deps)* Update dependency pytest to v9 - ([5ea0490](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/5ea0490e768068d34bd46256815608c96150d1d5))
+
 ## [1.15.4](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.3..v1.15.4) - 2026-08-19
 
 ### 📦 Dependencies
