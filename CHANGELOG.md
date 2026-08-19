@@ -4,9 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### 🚀 Features
+
+- *(install)* Reuse existing git-cliff before downloading - ([ffcef0a](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/ffcef0a497d088a8a081c62b763e223c0171db41))
+
+### 🐛 Bug Fixes
+
+- *(install)* Only reuse matching git-cliff versions - ([37d7592](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/37d7592e4706904ce8f89f5b8efee6e30f0643c1))
+
 ### 📚 Documentation
 
 - *(readme)* Document output variable release workflow - ([334a07c](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/334a07c6c4f7111acdbf1a2f486c19fbe93645d5))
+
+### 🧪 Testing
+
+- *(install)* Expect parsed version from existing git-cliff - ([637106d](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/637106d31931627885bb37715d5d232b5e52b47c))
+- *(podman)* Run runtime smoke test with git-cliff offline mode - ([508c69e](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/508c69e21bf8d2e99d1e237e48fddeb3c994791c))
+- *(install)* Add unit coverage for existing git-cliff detection - ([93634cf](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/93634cf5cdf7034f072b4019394ca18006a6e539))
 
 ## [1.13.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.13.0..v1.13.1) - 2026-06-09
 
