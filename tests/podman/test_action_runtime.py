@@ -111,6 +111,7 @@ def test_action_runtime_smoke_in_podman(tmp_path: Path) -> None:
         export GITHUB_SERVER_URL='https://example.invalid'
         export GITHUB_REPOSITORY='example/project'
         export RELEASE_PUBLISH_TOKEN=''
+        export GIT_CLIFF_OFFLINE=true
         PYTHONPATH="/action/src${{PYTHONPATH:+:${{PYTHONPATH}}}}" python3 -m auto_changelog_release_action
         git log -1 --pretty=%s > /fixtures/head_subject.txt
         git status --short > /fixtures/status.txt
