@@ -356,6 +356,22 @@ def test_config_from_environment_reads_git_cliff_offline(monkeypatch, tmp_path: 
     assert config.git_cliff_offline is True
 
 
+def test_config_from_environment_defaults_git_cliff_offline_to_true(
+    monkeypatch, tmp_path: Path
+) -> None:
+    clear_runtime_environment(monkeypatch)
+    monkeypatch.setenv("GITHUB_ACTION_PATH", str(tmp_path))
+    monkeypatch.setenv("RANGE", "before..after")
+    monkeypatch.setenv("GITHUB_SERVER_URL", "https://github.com")
+    monkeypatch.setenv("GITHUB_REPOSITORY", "actions/auto-changelog-release-action")
+    monkeypatch.setenv("GITHUB_REF", "refs/heads/main")
+    monkeypatch.delenv("GIT_CLIFF_OFFLINE", raising=False)
+
+    config = action_runtime.config_from_environment()
+
+    assert config.git_cliff_offline is True
+
+
 def test_run_action_runtime_sets_git_cliff_offline_env(monkeypatch, tmp_path: Path) -> None:
     captured: dict[str, str | None] = {}
     config = action_runtime.ActionRuntimeConfig(

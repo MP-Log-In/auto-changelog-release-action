@@ -58,7 +58,7 @@ inputs:
   git_cliff_offline:
     description: "Run git-cliff without fetching remote metadata."
     required: false
-    default: "false"
+    default: "true"
 
 outputs:
   release_created:

@@ -143,7 +143,7 @@ def config_from_environment() -> ActionRuntimeConfig:
         major_patterns=os.environ.get("MAJOR_PATTERNS", ""),
         minor_patterns=os.environ.get("MINOR_PATTERNS", ""),
         patch_patterns=os.environ.get("PATCH_PATTERNS", ""),
-        git_cliff_offline=os.environ.get("GIT_CLIFF_OFFLINE", "false").lower() == "true",
+        git_cliff_offline=os.environ.get("GIT_CLIFF_OFFLINE", "true").lower() == "true",
         revision_range=os.environ["RANGE"],
         github_event_before=os.environ.get("GITHUB_EVENT_BEFORE", ""),
         github_sha=os.environ.get("GITHUB_SHA", ""),

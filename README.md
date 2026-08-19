@@ -144,7 +144,7 @@ The action also exposes outputs on the step that runs it via `steps.<id>.outputs
 | `major_patterns` | no | `""` | Newline-separated regular expressions that trigger a major version bump. |
 | `minor_patterns` | no | `""` | Newline-separated regular expressions that trigger a minor version bump. |
 | `patch_patterns` | no | `""` | Newline-separated regular expressions that trigger a patch version bump. |
-| `git_cliff_offline` | no | `"false"` | If `true`, runs `git-cliff` in offline mode and skips remote metadata lookups. |
+| `git_cliff_offline` | no | `"true"` | If `true`, runs `git-cliff` in offline mode and skips remote metadata lookups. |
 
 ## Outputs
 
@@ -240,16 +240,18 @@ If a `chore(releasenotes)` commit has no body, the dedicated section is omitted 
 
 ## git-cliff offline mode
 
-By default, `git-cliff` runs with its normal remote metadata lookups enabled.
+By default, `git-cliff` runs in offline mode.
 
-If your CI environment uses placeholder repository URLs, has no outbound network access, or you want deterministic changelog rendering without remote API requests, enable offline mode:
+This avoids remote metadata lookups in CI environments with placeholder repository URLs, restricted outbound network access, or when you want deterministic changelog rendering without API requests.
 
 ```yaml
 with:
   git_cliff_offline: true
 ```
 
-This sets `GIT_CLIFF_OFFLINE=true` for the internal `git-cliff` invocations used for unreleased and release changelog generation.
+Set `git_cliff_offline: false` if you explicitly want `git-cliff` to perform its remote metadata lookups.
+
+The action maps this to `GIT_CLIFF_OFFLINE` for the internal `git-cliff` invocations used for unreleased and release changelog generation.
 
 ## Notes
 
