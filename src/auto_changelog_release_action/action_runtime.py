@@ -16,7 +16,6 @@ from auto_changelog_release_action.git_setup import configure_git_author
 from auto_changelog_release_action.install_git_cliff import install_git_cliff
 from auto_changelog_release_action.release_flow import (
     ReleaseConfig,
-    ReleaseFlowResult,
     run_release_flow,
 )
 from auto_changelog_release_action.repository import split_repository_slug
@@ -53,6 +52,7 @@ class ActionRuntimeConfig:
     major_patterns: str
     minor_patterns: str
     patch_patterns: str
+    git_cliff_offline: bool
     revision_range: str
     github_event_before: str
     github_sha: str
@@ -143,6 +143,7 @@ def config_from_environment() -> ActionRuntimeConfig:
         major_patterns=os.environ.get("MAJOR_PATTERNS", ""),
         minor_patterns=os.environ.get("MINOR_PATTERNS", ""),
         patch_patterns=os.environ.get("PATCH_PATTERNS", ""),
+        git_cliff_offline=os.environ.get("GIT_CLIFF_OFFLINE", "false").lower() == "true",
         revision_range=os.environ["RANGE"],
         github_event_before=os.environ.get("GITHUB_EVENT_BEFORE", ""),
         github_sha=os.environ.get("GITHUB_SHA", ""),
@@ -221,44 +222,52 @@ def run_action_runtime(config: ActionRuntimeConfig) -> None:
     )
     install_git_cliff(cliff_version)
 
-    if version_changed:
-        if not version_after:
-            raise RuntimeError("VERSION_AFTER is required for release publishing")
-        if not config.release_publish_token:
-            raise RuntimeError("Release publishing requires the explicit token input.")
-        owner, repo = split_repository_slug(config.repository)
-        release_result = run_release_flow(
-            ReleaseConfig(
+    previous_git_cliff_offline = os.environ.get("GIT_CLIFF_OFFLINE")
+    os.environ["GIT_CLIFF_OFFLINE"] = bool_string(config.git_cliff_offline)
+    try:
+        if version_changed:
+            if not version_after:
+                raise RuntimeError("VERSION_AFTER is required for release publishing")
+            if not config.release_publish_token:
+                raise RuntimeError("Release publishing requires the explicit token input.")
+            owner, repo = split_repository_slug(config.repository)
+            release_result = run_release_flow(
+                ReleaseConfig(
+                    changelog_file=Path("CHANGELOG.md"),
+                    cliff_config=Path(DEFAULT_CLIFF_CONFIG),
+                    version=version_after,
+                    git_branch=config.git_ref.removeprefix("refs/heads/"),
+                    api_url=config.api_url,
+                    repository_owner=owner,
+                    repository_name=repo,
+                    publish_token=config.release_publish_token,
+                ),
+                cwd=Path.cwd(),
+            )
+            write_release_outputs(
+                config,
+                release_created=release_result.release_created,
+                release_prerelease=release_result.release_prerelease,
+                release_tag=release_result.release_tag,
+            )
+            return
+
+        run_unreleased_changelog_flow(
+            UnreleasedChangelogConfig(
                 changelog_file=Path("CHANGELOG.md"),
                 cliff_config=Path(DEFAULT_CLIFF_CONFIG),
-                version=version_after,
                 git_branch=config.git_ref.removeprefix("refs/heads/"),
-                api_url=config.api_url,
-                repository_owner=owner,
-                repository_name=repo,
-                publish_token=config.release_publish_token,
             ),
             cwd=Path.cwd(),
         )
         write_release_outputs(
             config,
-            release_created=release_result.release_created,
-            release_prerelease=release_result.release_prerelease,
-            release_tag=release_result.release_tag,
+            release_created=False,
+            release_prerelease=False,
+            release_tag=None,
         )
-        return
-
-    run_unreleased_changelog_flow(
-        UnreleasedChangelogConfig(
-            changelog_file=Path("CHANGELOG.md"),
-            cliff_config=Path(DEFAULT_CLIFF_CONFIG),
-            git_branch=config.git_ref.removeprefix("refs/heads/"),
-        ),
-        cwd=Path.cwd(),
-    )
-    write_release_outputs(
-        config,
-        release_created=False,
-        release_prerelease=False,
-        release_tag=None,
-    )
+    finally:
+        if previous_git_cliff_offline is None:
+            os.environ.pop("GIT_CLIFF_OFFLINE", None)
+        else:
+            os.environ["GIT_CLIFF_OFFLINE"] = previous_git_cliff_offline
