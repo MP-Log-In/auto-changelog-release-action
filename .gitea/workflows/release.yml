@@ -19,3 +19,5 @@ jobs:
           allow_non_main_release: "true"
           version_file: pyproject.toml
           version_regex: '^version\s*=\s*"([^"]+)"'
+          patch_patterns: |
+            ^chore\(deps\)
