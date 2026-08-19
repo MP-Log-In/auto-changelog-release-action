@@ -144,6 +144,7 @@ The action also exposes outputs on the step that runs it via `steps.<id>.outputs
 | `major_patterns` | no | `""` | Newline-separated regular expressions that trigger a major version bump. |
 | `minor_patterns` | no | `""` | Newline-separated regular expressions that trigger a minor version bump. |
 | `patch_patterns` | no | `""` | Newline-separated regular expressions that trigger a patch version bump. |
+| `git_cliff_offline` | no | `"false"` | If `true`, runs `git-cliff` in offline mode and skips remote metadata lookups. |
 
 ## Outputs
 
@@ -236,6 +237,19 @@ Clear the old cache directory before the first restart.
 ```
 
 If a `chore(releasenotes)` commit has no body, the dedicated section is omitted and the normal grouped changelog rendering remains unchanged for all other commits.
+
+## git-cliff offline mode
+
+By default, `git-cliff` runs with its normal remote metadata lookups enabled.
+
+If your CI environment uses placeholder repository URLs, has no outbound network access, or you want deterministic changelog rendering without remote API requests, enable offline mode:
+
+```yaml
+with:
+  git_cliff_offline: true
+```
+
+This sets `GIT_CLIFF_OFFLINE=true` for the internal `git-cliff` invocations used for unreleased and release changelog generation.
 
 ## Notes
 
