@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.15.6](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.5..v1.15.6) - 2026-08-19
+
+### 📦 Dependencies
+
+- *(deps)* Update dependency pytest-cov to v7 - ([87b1bc6](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/87b1bc6731e9a0efdf7d5a710433d26e69b8e938))
+
 ## [1.15.5](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.4..v1.15.5) - 2026-08-19
 
 ### 📦 Dependencies
