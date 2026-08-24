@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 📚 Documentation
+
+- *(readme)* Update release workflow example for Gitea token - ([0f8437e](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/0f8437ec032e1fe59182dbb248479f95d76fce0a))
+
 ## [1.16.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.6..v1.16.0) - 2026-08-24
 
 ### 🚀 Features
