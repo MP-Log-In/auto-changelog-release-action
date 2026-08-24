@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.16.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.6..v1.16.0) - 2026-08-24
+
+### 🚀 Features
+
+- *(release)* Add Gitea trigger_release_workflows support - ([61f25c1](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/61f25c14af0a215893fbf86e9a4ccead528e7536))
+
 ## [1.15.6](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.5..v1.15.6) - 2026-08-19
 
 ### 📦 Dependencies
