@@ -126,7 +126,7 @@ jobs:
 ```
 ---
 
-The inputs are the same on Gitea and GitHub.
+The inputs are available on Gitea and GitHub. Host-specific behavior is noted below.
 
 The action also exposes outputs on the step that runs it via `steps.<id>.outputs.*`.
 
@@ -145,6 +145,7 @@ The action also exposes outputs on the step that runs it via `steps.<id>.outputs
 | `minor_patterns` | no | `""` | Newline-separated regular expressions that trigger a minor version bump. |
 | `patch_patterns` | no | `""` | Newline-separated regular expressions that trigger a patch version bump. |
 | `git_cliff_offline` | no | `"true"` | If `true`, runs `git-cliff` in offline mode and skips remote metadata lookups. |
+| `trigger_release_workflows` | no | `"false"` | On Gitea hosts supporting the trigger_workflows release API option, if `true`, adds `"trigger_workflows": true` to the release API payload. The input has no effect on GitHub. |
 
 ## Outputs
 

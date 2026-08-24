@@ -57,6 +57,7 @@ class ActionRuntimeConfig:
     github_event_before: str
     github_sha: str
     release_publish_token: str
+    trigger_release_workflows: bool = False
 
 
 def bool_string(value: bool) -> str:
@@ -148,6 +149,9 @@ def config_from_environment() -> ActionRuntimeConfig:
         github_event_before=os.environ.get("GITHUB_EVENT_BEFORE", ""),
         github_sha=os.environ.get("GITHUB_SHA", ""),
         release_publish_token=os.environ.get("RELEASE_PUBLISH_TOKEN", ""),
+        trigger_release_workflows=(
+            os.environ.get("TRIGGER_RELEASE_WORKFLOWS", "false").lower() == "true"
+        ),
     )
 
 
@@ -241,6 +245,8 @@ def run_action_runtime(config: ActionRuntimeConfig) -> None:
                     repository_owner=owner,
                     repository_name=repo,
                     publish_token=config.release_publish_token,
+                    host=config.host,
+                    trigger_release_workflows=config.trigger_release_workflows,
                 ),
                 cwd=Path.cwd(),
             )

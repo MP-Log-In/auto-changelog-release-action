@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import io
+import json
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError
+
+import pytest
 
 from auto_changelog_release_action.release_flow import (
     ReleaseConfig,
@@ -12,6 +15,7 @@ from auto_changelog_release_action.release_flow import (
     is_configured_prerelease_version,
     release_api_body,
 )
+from auto_changelog_release_action.runtime_host import RuntimeHost
 
 
 def test_extract_release_notes_matches_current_heading_behavior() -> None:
@@ -82,7 +86,21 @@ def test_create_release_requires_api_url(tmp_path: Path) -> None:
         raise AssertionError("expected missing api url error")
 
 
-def test_create_release_uses_normalized_release_endpoint(monkeypatch, tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    ("host", "trigger_release_workflows", "includes_trigger_workflows"),
+    [
+        (RuntimeHost.GITEA, True, True),
+        (RuntimeHost.GITEA, False, False),
+        (RuntimeHost.GITHUB, True, False),
+    ],
+)
+def test_create_release_uses_host_aware_payload_and_normalized_endpoint(
+    monkeypatch,
+    tmp_path: Path,
+    host: RuntimeHost,
+    trigger_release_workflows: bool,
+    includes_trigger_workflows: bool,
+) -> None:
     config = ReleaseConfig(
         changelog_file=tmp_path / "CHANGELOG.md",
         cliff_config=tmp_path / "cliff.toml",
@@ -92,6 +110,8 @@ def test_create_release_uses_normalized_release_endpoint(monkeypatch, tmp_path: 
         repository_owner="actions",
         repository_name="auto-changelog-release-action",
         publish_token="test-token",
+        host=host,
+        trigger_release_workflows=trigger_release_workflows,
     )
     captured: dict[str, Any] = {}
 
@@ -113,7 +133,7 @@ def test_create_release_uses_normalized_release_endpoint(monkeypatch, tmp_path: 
         captured["authorization"] = request.get_header("Authorization")
         captured["content_type"] = request.get_header("Content-type")
         captured["method"] = request.get_method()
-        captured["payload"] = request.data.decode("utf-8")
+        captured["payload"] = json.loads(request.data.decode("utf-8"))
         return FakeResponse()
 
     monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
@@ -122,12 +142,23 @@ def test_create_release_uses_normalized_release_endpoint(monkeypatch, tmp_path: 
 
     assert created is True
 
+    expected_payload = {
+        "tag_name": "v1.2.3",
+        "target_commitish": "main",
+        "name": "Release v1.2.3",
+        "body": "- Added feature\n",
+        "draft": False,
+        "prerelease": False,
+    }
+    if includes_trigger_workflows:
+        expected_payload["trigger_workflows"] = True
+
     assert captured == {
         "url": "https://api.example.invalid/repos/actions/auto-changelog-release-action/releases",
         "authorization": "token test-token",
         "content_type": "application/json",
         "method": "POST",
-        "payload": '{"tag_name": "v1.2.3", "target_commitish": "main", "name": "Release v1.2.3", "body": "- Added feature\\n", "draft": false, "prerelease": false}',
+        "payload": expected_payload,
     }
 
 

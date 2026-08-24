@@ -15,6 +15,7 @@ from pathlib import Path
 
 from auto_changelog_release_action.changelog_context import augment_context_json
 from auto_changelog_release_action.process_utils import run_command, run_git
+from auto_changelog_release_action.runtime_host import RuntimeHost
 from auto_changelog_release_action.versioning import PRE_RELEASE_LABELS, parse_version
 
 RELEASE_COMMIT_MESSAGE_TEMPLATE = "chore(changelog): update changelog for v{version}"
@@ -32,6 +33,8 @@ class ReleaseConfig:
     repository_owner: str
     repository_name: str
     publish_token: str
+    host: RuntimeHost = RuntimeHost("github")
+    trigger_release_workflows: bool = False
 
 
 @dataclass(frozen=True)
@@ -196,16 +199,17 @@ def create_release(
         f"{config.api_url.rstrip('/')}/repos/"
         f"{config.repository_owner}/{config.repository_name}/releases"
     )
-    payload = json.dumps(
-        {
-            "tag_name": f"v{config.version}",
-            "target_commitish": "main",
-            "name": f"Release v{config.version}",
-            "body": release_body,
-            "draft": False,
-            "prerelease": prerelease,
-        }
-    ).encode("utf-8")
+    payload_data = {
+        "tag_name": f"v{config.version}",
+        "target_commitish": "main",
+        "name": f"Release v{config.version}",
+        "body": release_body,
+        "draft": False,
+        "prerelease": prerelease,
+    }
+    if config.host is RuntimeHost.GITEA and config.trigger_release_workflows:
+        payload_data["trigger_workflows"] = True
+    payload = json.dumps(payload_data).encode("utf-8")
 
     for attempt in range(1, max_attempts + 1):
         print(f"🚀 Try {attempt}/{max_attempts}: creating release v{config.version} …")

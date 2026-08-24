@@ -22,6 +22,7 @@ def clear_runtime_environment(monkeypatch) -> None:
         "GITEA_REPOSITORY",
         "GITHUB_REF",
         "GITEA_REF",
+        "TRIGGER_RELEASE_WORKFLOWS",
     ):
         monkeypatch.delenv(name, raising=False)
 
@@ -54,6 +55,7 @@ def test_run_action_runtime_uses_api_url_for_release_requests(
         github_event_before="before",
         github_sha="after",
         release_publish_token="token",
+        trigger_release_workflows=True,
     )
 
     monkeypatch.chdir(tmp_path)
@@ -87,6 +89,8 @@ def test_run_action_runtime_uses_api_url_for_release_requests(
 
     def fake_run_release_flow(release_config, *, cwd: Path) -> ReleaseFlowResult:
         captured["api_url"] = release_config.api_url
+        captured["host"] = release_config.host
+        captured["trigger_release_workflows"] = release_config.trigger_release_workflows
         captured["cwd"] = cwd
         return ReleaseFlowResult(
             release_created=True,
@@ -105,6 +109,8 @@ def test_run_action_runtime_uses_api_url_for_release_requests(
 
     assert captured == {
         "api_url": "https://api.example.invalid",
+        "host": RuntimeHost.GITEA,
+        "trigger_release_workflows": True,
         "cwd": tmp_path,
     }
 
@@ -354,6 +360,19 @@ def test_config_from_environment_reads_git_cliff_offline(monkeypatch, tmp_path: 
     config = action_runtime.config_from_environment()
 
     assert config.git_cliff_offline is True
+
+
+def test_config_from_environment_reads_trigger_release_workflows(
+    monkeypatch, tmp_path: Path
+) -> None:
+    clear_runtime_environment(monkeypatch)
+    monkeypatch.setenv("GITHUB_ACTION_PATH", str(tmp_path))
+    monkeypatch.setenv("RANGE", "before..after")
+    monkeypatch.setenv("TRIGGER_RELEASE_WORKFLOWS", "true")
+
+    config = action_runtime.config_from_environment()
+
+    assert config.trigger_release_workflows is True
 
 
 def test_config_from_environment_defaults_git_cliff_offline_to_true(

@@ -60,6 +60,13 @@ inputs:
     required: false
     default: "true"
 
+  trigger_release_workflows:
+    description: >
+      Allow the published release to trigger release workflows.
+      Currently effective on Gitea hosts supporting the trigger_workflows release API option.
+    required: false
+    default: "false"
+
 outputs:
   release_created:
     description: "Whether this run created a remote release."
@@ -103,6 +110,7 @@ runs:
         GITHUB_SERVER_URL: ${{ github.server_url || '' }}
         GITHUB_REPOSITORY: ${{ github.repository || '' }}
         RELEASE_PUBLISH_TOKEN: ${{ inputs.token || '' }}
+        TRIGGER_RELEASE_WORKFLOWS: ${{ inputs.trigger_release_workflows }}
       run: |
         PYTHONPATH="${{ github.action_path }}/src${PYTHONPATH:+:${PYTHONPATH}}" \
           python3 -m auto_changelog_release_action
