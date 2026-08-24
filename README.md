@@ -68,8 +68,8 @@ jobs:
       - name: Release
         uses: https://git.0xmax42.io/actions/auto-changelog-release-action@v1
         with:
-          token: ${{ secrets.RELEASE_PUBLISH_TOKEN }}
-          allow_non_main_release: "true"
+          token: ${{ secrets.GITEA_TOKEN }}
+          trigger_release_workflows: "true"
           version_file: pyproject.toml
           version_regex: '^version\s*=\s*"([^"]+)"'
 ```
