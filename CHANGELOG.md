@@ -2,11 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [1.16.1](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.16.0..v1.16.1) - 2026-08-27
 
 ### 📚 Documentation
 
 - *(readme)* Update release workflow example for Gitea token - ([0f8437e](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/0f8437ec032e1fe59182dbb248479f95d76fce0a))
+
+### 📦 Dependencies
+
+- *(deps)* Update python package updates - ([5ca9465](https://git.0xmax42.io/actions/auto-changelog-release-action/commit/5ca94654d8f2b589a238575173066ed82d9b854b))
 
 ## [1.16.0](https://git.0xmax42.io/actions/auto-changelog-release-action/compare/v1.15.6..v1.16.0) - 2026-08-24
 
